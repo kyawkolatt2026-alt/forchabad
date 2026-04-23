@@ -375,4 +375,15 @@
             let timeStr = document.getElementById(`dh-${d}`).innerText;
             if(timeStr !== "0:00") {
                 let b = boxes.slice((d-1)*4, d*4).map(x => x.innerText || "-");
-                body.innerHTML += `<tr><td>${d}</td><td>${b[0]}-${b[1]}</td><td>${
+                body.innerHTML += `<tr><td>${d}</td><td>${b[0]}-${b[1]}</td><td>${b[2]}-${b[3]}</td><td><b>${timeStr}</b></td></tr>`;
+            }
+        }
+        window.scrollTo(0,0);
+    }
+
+    function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
+    function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
+    function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+</script>
+</body>
+</html>
