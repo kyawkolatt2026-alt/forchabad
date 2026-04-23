@@ -11,7 +11,7 @@
         }
         body { 
             font-family: sans-serif; background: var(--bg); margin: 0; 
-            padding: 230px 12px 40px 12px; color: var(--dark);
+            padding: 230px 12px 60px 12px; color: var(--dark);
         }
         body.keypad-open { padding-bottom: 340px; }
 
@@ -20,16 +20,38 @@
             background: #fff; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
             height: 220px; border-bottom: 3px solid var(--dark);
         }
-        .header-top { background: var(--dark); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; }
+        .header-top { 
+            background: var(--dark); color: #fff; 
+            display: grid; grid-template-columns: 80px 1fr 60px; 
+            align-items: center; padding: 10px 15px; 
+        }
+        .header-title { text-align: center; font-weight: 800; letter-spacing: 1px; font-size: 16px; }
+
+        /* လမ်းညွှန် Button ကို စာသားဖြင့်ပြောင်းလဲခြင်း */
+        .btn-help { background: #4b5563; color: white; border: none; padding: 6px 4px; border-radius: 6px; font-weight: bold; font-size: 11px; cursor: pointer; }
+        .btn-new { background: var(--danger); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; font-size: 10px; }
+
         .info-bar { display: flex; gap: 8px; padding: 12px 12px 0 12px; }
         .info-bar input { border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; flex: 1; outline: none; }
         
         .input-bar { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
-        #base-salary { width: 110px; padding: 10px; border: 2px solid var(--dark); border-radius: 10px; font-weight: bold; font-size: 20px; text-align: center; }
+        #base-salary { width: 110px; padding: 10px; border: 2px solid var(--dark); border-radius: 10px; font-weight: bold; font-size: 20px; text-align: center; color: var(--primary); }
         .pay-box { text-align: right; background: #ecfdf5; padding: 8px 15px; border-radius: 12px; border: 1.5px solid var(--success); }
         .pay-label { font-size: 10px; color: var(--success); font-weight: bold; }
         
         .summary { display: grid; grid-template-columns: 1fr 1fr; background: #f8fafc; padding: 10px 15px; font-size: 13px; font-weight: 600; border-top: 1px solid var(--border); }
+
+        #guide-modal { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); 
+            z-index: 2000; padding: 20px; align-items: center; justify-content: center; 
+        }
+        .guide-content { 
+            background: #fff; padding: 25px; border-radius: 20px; max-width: 90%; 
+            max-height: 85vh; overflow-y: auto; line-height: 1.6;
+        }
+        .guide-content h3 { color: var(--dark); margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px; text-align: center; }
+        .guide-item { margin-bottom: 15px; font-size: 14px; }
+        .guide-item b { color: var(--primary); }
 
         .history-panel { background: #fff; margin: 15px 0; padding: 18px; border-radius: 15px; }
         #search-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; outline: none; }
@@ -41,19 +63,22 @@
         .day { width: 40px; font-weight: 800; color: #64748b; }
         .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex: 1; }
         .box { background: #fcfcfc; height: 42px; line-height: 42px; text-align: center; border-radius: 10px; border: 1.5px solid #d1d5db; font-weight: bold; font-size: 14px; }
-        .box.active { border-color: var(--primary); background: #eff6ff; transform: scale(1.05); }
+        .box.active { border-color: var(--primary); background: #eff6ff; }
 
         .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 1000; transform: translateY(100%); transition: 0.3s; border-top: 2px solid var(--dark); border-radius: 24px 24px 0 0; }
         .keypad.open { transform: translateY(0); }
         .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
         .key-grid button { padding: 14px; font-size: 24px; font-weight: bold; border-radius: 14px; border: 1px solid #e5e7eb; background: #fff; }
-        .key-grid button:active { background: var(--primary); color: #fff; }
-
         .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 15px 15px 15px; }
         .ctrl-btns button { padding: 12px 2px; border-radius: 10px; border: none; font-weight: bold; color: white; font-size: 10px; }
 
         #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 1500; overflow-y: auto; padding: 15px; }
         .report-card { border: 2px solid var(--dark); padding: 20px; background: #fff; border-radius: 15px; }
+
+        .footer-author { 
+            position: fixed; bottom: 5px; right: 10px; 
+            font-size: 10px; color: #94a3b8; font-weight: bold; z-index: 50;
+        }
     </style>
 </head>
 <body onclick="handleBackdrop(event)">
@@ -61,8 +86,9 @@
 <div id="edit-view">
     <header>
         <div class="header-top">
-            <span style="font-weight: 800;">CHABAD HOUSE</span>
-            <button onclick="confirmClear()" style="background:var(--danger); border:none; padding:6px 12px; border-radius:8px; color:white; font-weight:bold;">RESET</button>
+            <button class="btn-help" onclick="toggleGuide(event)">လမ်းညွှန်</button>
+            <div class="header-title">CHABAD HOUSE</div>
+            <button class="btn-new" onclick="confirmClear()">NEW</button>
         </div>
         <div class="info-bar">
             <input type="text" id="user-name" placeholder="အမည်ရိုက်ပါ">
@@ -81,14 +107,61 @@
         </div>
     </header>
 
+    <div id="guide-modal" onclick="toggleGuide(event)">
+        <div class="guide-content" onclick="event.stopPropagation()">
+            <h3>အသုံးပြုပုံလမ်းညွှန်</h3>
+            <p style="font-size:13px; color:var(--primary); font-weight:bold; text-align:center; margin-bottom:20px;">
+                "Chabad ဝန်ထမ်းများ လစာတွက်ထုတ်ရာတွင် လွယ်ကူစေရန် ရေးသားပေးထားပါသည်"
+            </p>
+            <div class="guide-item">
+                <b>၁။ သတ်မှတ်လစာ (Salary) ပြင်ဆင်ခြင်း:</b><br>
+                လစာ ၁၂၀၀၀ နေရာတွင် မိမိပြင်လိုသော ပမာဏကို နှိပ်၍ တိုက်ရိုက် ပြောင်းလဲနိုင်ပါသည်။ (ဥပမာ- ၁၃၀၀၀ ပြောင်းလိုက်ပါက တွက်ချက်မှုအားလုံး အလိုအလျောက် ပြောင်းလဲသွားမည် ဖြစ်သည်)
+            </div>
+            <div class="guide-item">
+                <b>၂။ အချိန်ထည့်သွင်းခြင်း:</b><br>
+                နေ့ရက်အလိုက် အကွက်များကိုနှိပ်၍ အဝင်/အထွက် အချိန်များကို Calculator ဖြင့် ရိုက်ထည့်ပါ။ (ဥပမာ- 09:00)
+            </div>
+            <div class="guide-item">
+                <b>၃။ လစာတွက်ချက်မှုစနစ်:</b><br>
+                တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> ကို စံနှုန်းအဖြစ် သတ်မှတ်ထားပါသည်။
+            </div>
+            <div class="guide-item">
+                <b>၄။ အချိုးကျလစာ (Pro-rata):</b><br>
+                စုစုပေါင်းအလုပ်ချိန် ၂၃၄ နာရီမပြည့်ပါက မိမိသတ်မှတ်ထားသော လစာ (Base Salary) ထဲမှ အလုပ်လုပ်ခဲ့သော နာရီအလိုက်သာ အချိုးကျ ရရှိပါမည်။
+            </div>
+            <div class="guide-item">
+                <b>၅။ အချိန်ပိုကြေး (OT):</b><br>
+                အလုပ်ချိန် ၂၃၄ နာရီထက် ကျော်လွန်ပါက ပိုလုပ်သော နာရီများအတွက် <b>၁ နာရီလျှင် ၅၇ ကျပ်</b> နှုန်းဖြင့် OT ကြေးကို အလိုအလျောက် ပေါင်းပေးပါသည်။
+            </div>
+            <button onclick="toggleGuide(event)" style="width:100%; padding:14px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">နားလည်ပါပြီ</button>
+        </div>
+    </div>
+
     <div class="history-panel">
-        <input type="text" id="search-box" placeholder="🔍 မှတ်တမ်းရှာရန် နာမည်ရိုက်ပါ..." oninput="handleSearch()">
+        <input type="text" id="search-box" placeholder="🔍 ရှာရန် အမည်ရိုက်ပါ..." oninput="handleSearch()">
         <div id="history-list">
             <table class="data-table"><tbody id="history-table-body"></tbody></table>
         </div>
     </div>
 
     <div id="list"></div>
+</div>
+
+<div class="footer-author">ရေးသားသူ-KKL</div>
+
+<div id="keypad" class="keypad" onclick="event.stopPropagation()">
+    <div class="key-grid">
+        <button onclick="key(1)">1</button><button onclick="key(2)">2</button><button onclick="key(3)">3</button>
+        <button onclick="key(4)">4</button><button onclick="key(5)">5</button><button onclick="key(6)">6</button>
+        <button onclick="key(7)">7</button><button onclick="key(8)">8</button><button onclick="key(9)">9</button>
+        <button onclick="key('AC')" style="color:var(--danger)">AC</button><button onclick="key(0)">0</button><button onclick="key('DEL')">⌫</button>
+    </div>
+    <div class="ctrl-btns">
+        <button onclick="closeK()" style="background:#64748b;">DONE</button>
+        <button onclick="nextRow()" style="background:var(--dark);">NEXT</button>
+        <button onclick="saveToDB()" style="background:var(--primary);">SAVE</button>
+        <button onclick="finishDraft()" style="background:var(--success);">PREVIEW</button>
+    </div>
 </div>
 
 <div id="report-view">
@@ -103,7 +176,7 @@
             <thead><tr style="background:#eee;"><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
             <tbody id="report-body"></tbody>
         </table>
-        <div style="margin-top:20px; background:#f8fafc; border:2px solid #000; padding:15px; border-radius:10px; line-height:1.8;">
+        <div style="margin-top:20px; background:#f8fafc; border:2px solid #000; padding:15px; border-radius:10px;">
             <div style="display:flex; justify-content:space-between;"><span>Total Work Hours:</span><b id="rv-total-hrs">0:00</b></div>
             <div style="display:flex; justify-content:space-between;"><span>OT Hours:</span><b id="rv-ot-hrs">0:00</b></div>
             <div style="display:flex; justify-content:space-between; color:var(--success);"><span>OT Pay (57/hr):</span><b id="rv-ot-pay">0</b></div>
@@ -114,21 +187,6 @@
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:25px 0;">
         <button style="padding:18px; border-radius:15px; background:#64748b; color:white; border:none; font-weight:bold;" onclick="closeReport()">BACK</button>
         <button style="padding:18px; border-radius:15px; background:var(--primary); color:white; border:none; font-weight:bold;" onclick="switchToEdit()">EDIT</button>
-    </div>
-</div>
-
-<div id="keypad" class="keypad" onclick="event.stopPropagation()">
-    <div class="key-grid">
-        <button onclick="key(1)">1</button><button onclick="key(2)">2</button><button onclick="key(3)">3</button>
-        <button onclick="key(4)">4</button><button onclick="key(5)">5</button><button onclick="key(6)">6</button>
-        <button onclick="key(7)">7</button><button onclick="key(8)">8</button><button onclick="key(9)">9</button>
-        <button onclick="key('AC')" style="color:var(--danger)">AC</button><button onclick="key(0)">0</button><button onclick="key('DEL')">⌫</button>
-    </div>
-    <div class="ctrl-btns">
-        <button onclick="closeK()" style="background:#64748b;">DONE</button>
-        <button onclick="nextRow()" style="background:var(--dark);">NEXT</button>
-        <button onclick="saveToDB()" style="background:var(--primary);">SAVE</button>
-        <button onclick="finishDraft()" style="background:var(--success);">PREVIEW</button>
     </div>
 </div>
 
@@ -148,6 +206,12 @@
         list.appendChild(row);
     }
     boxes = Array.from(document.querySelectorAll('.box'));
+
+    function toggleGuide(e) {
+        e.stopPropagation();
+        const modal = document.getElementById('guide-modal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
 
     function calc() {
         let totalMin = 0;
@@ -169,26 +233,14 @@
             document.getElementById(`dh-${d}`).innerText = Math.floor(dMin/60) + ":" + (dMin%60 < 10 ? "0"+(dMin%60) : dMin%60);
         }
 
-        let calculatedBase = 0;
-        let otMin = 0;
-        let otPay = 0;
-
-        if (totalMin >= targetMin) {
-            calculatedBase = inputSalary;
-            otMin = totalMin - targetMin;
-            otPay = Math.round((otMin / 60) * 57);
-        } else {
-            // Pro-rata: ၂၃၄ နာရီအောက်ဆို လျှော့တွက်မည်
-            calculatedBase = Math.round((totalMin / targetMin) * inputSalary);
-            otMin = 0;
-            otPay = 0;
-        }
-
+        let calculatedBase = totalMin >= targetMin ? inputSalary : Math.round((totalMin / targetMin) * inputSalary);
+        let otMin = totalMin > targetMin ? totalMin - targetMin : 0;
+        let otPay = Math.round((otMin / 60) * 57);
         let grand = calculatedBase + otPay;
+
         document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
         document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = grand.toLocaleString();
-        
         return { totalMin, otMin, otPay, base: calculatedBase, grand };
     }
 
@@ -206,7 +258,6 @@
 
     function closeK() { if(active) active.classList.remove('active'); document.getElementById('keypad').classList.remove('open'); document.body.classList.remove('keypad-open'); active = null; }
     function handleBackdrop(e) { if (!document.getElementById('keypad').contains(e.target)) closeK(); }
-    
     function key(v) {
         if(!active) return;
         let s = active.innerText.replace(":","");
@@ -216,7 +267,6 @@
         calc();
         if(s.length === 4) { let n = parseInt(active.dataset.id) + 1; if(n < boxes.length) boxes[n].click(); }
     }
-
     function nextRow() { if(!active) return; let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4; if(next < boxes.length) boxes[next].click(); }
 
     function saveToDB() {
