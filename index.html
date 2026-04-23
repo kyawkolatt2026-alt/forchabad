@@ -24,7 +24,6 @@
             align-items: center; padding: 8px 12px; 
         }
         
-        /* --- NEW ANIMATED TITLE DESIGN --- */
         .marquee-container { flex: 1; text-align: center; margin: 0 10px; overflow: hidden; }
         .header-title { 
             display: inline-block; font-weight: 900; font-size: 19px;
@@ -34,18 +33,10 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-transform: uppercase;
             animation: gradientMove 4s linear infinite, glowPulse 2s ease-in-out infinite;
         }
-        @keyframes gradientMove {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-        @keyframes glowPulse {
-            0%, 100% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5)); }
-            50% { filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8)); }
-        }
-        /* --------------------------------- */
+        @keyframes gradientMove { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        @keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5)); } 50% { filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8)); } }
 
         .btn-top { width: 75px; height: 35px; border: none; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; color: #fff; }
         .btn-help { background: var(--primary); }
@@ -83,7 +74,18 @@
         .guide-item { margin-bottom: 18px; font-size: 14px; border-left: 5px solid var(--primary); padding-left: 12px; line-height: 1.6; }
 
         .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 14px; color: var(--dark); font-weight: 900; z-index: 50; background: #fff; padding: 6px 15px; border-radius: 50px; border: 2px solid var(--primary); }
-        #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 4000; overflow-y: auto; padding: 15px; }
+
+        /* --- NEW SLIP DESIGN STYLES --- */
+        #report-view { display: none; position: fixed; inset: 0; background: #f1f5f9; z-index: 4000; overflow-y: auto; padding: 10px; }
+        .slip-container { background: #fff; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 20px; border-top: 8px solid var(--dark); max-width: 500px; margin: 0 auto; }
+        .slip-header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 15px; }
+        .slip-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .slip-row b { color: var(--dark); }
+        .slip-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; }
+        .slip-table th { background: #f8fafc; padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0; }
+        .slip-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
+        .total-section { background: var(--dark); color: #fff; padding: 15px; border-radius: 10px; margin-top: 15px; }
+        /* ------------------------------ */
         
         .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; }
         .btn-view { background: var(--primary); }
@@ -96,9 +98,7 @@
     <header>
         <div class="header-top">
             <button class="btn-top btn-help" onclick="toggleGuide(event)">လမ်းညွှန်</button>
-            <div class="marquee-container">
-                <div class="header-title">CHABAD HOUSE PAYROLL</div>
-            </div>
+            <div class="marquee-container"><div class="header-title">CHABAD HOUSE PAYROLL</div></div>
             <button class="btn-top btn-new" onclick="confirmClear()">NEW</button>
         </div>
         <div class="info-bar">
@@ -121,11 +121,10 @@
     <div id="guide-modal" onclick="toggleGuide(event)">
         <div class="guide-content" onclick="event.stopPropagation()">
             <h2 style="text-align:center; color:var(--dark); margin-top:0;">အသုံးပြုပုံလမ်းညွှန်</h2>
-            <p style="font-size:13px; color:var(--primary); font-weight:bold; text-align:center;">"Chabad ဝန်ထမ်းများအတွက် အထူးရေးသားပေးထားပါသည်"</p>
             <div class="guide-item"><b>၁။ လစာပြင်ခြင်း:</b> လစာ ၁၂၀၀၀ နေရာတွင် နှိပ်၍ မိမိစိတ်ကြိုက် ပြောင်းလဲနိုင်ပါသည်။</div>
-            <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ် (ဥပမာ- ညနေ ၅ နာရီဆိုလျှင် ၁၇၀၀) ရိုက်ရန်။</div>
+            <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ်သုံးရန်။</div>
             <div class="guide-item"><b>၃။ စံနှုန်း:</b> တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> သတ်မှတ်ထားပါသည်။</div>
-            <div class="guide-item"><b>၄။ အချိုးကျလစာ:</b> ၂၃၄ နာရီမပြည့်ပါက အလုပ်လုပ်ခဲ့သော နာရီအလိုက်သာ အချိုးကျ (Pro-rata) တွက်ချက်ပေးပါမည်။</div>
+            <div class="guide-item"><b>၄။ အချိုးကျလစာ:</b> ၂၃၄ နာရီမပြည့်ပါက အလုပ်လုပ်ခဲ့သော နာရီအလိုက်သာ အချိုးကျ တွက်ချက်ပေးပါမည်။</div>
             <div class="guide-item"><b>၅။ OT တွက်ချက်ခြင်း:</b> ၂၃၄ နာရီထက် ကျော်လွန်ပါက ပိုလုပ်သော နာရီများအတွက် <b>၁ နာရီလျှင် ၅၇ ကျပ်</b> ပေါင်းပေးပါသည်။</div>
             <button onclick="toggleGuide(event)" style="width:100%; padding:15px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:16px;">နားလည်ပါပြီ</button>
         </div>
@@ -168,43 +167,40 @@
 </div>
 
 <div id="report-view">
-    <div style="border: 3px solid var(--dark); padding: 20px; background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-        <h2 style="text-align:center; margin:0;">CHABAD HOUSE</h2>
-        <div style="display:flex; justify-content: space-between; margin-top:15px; font-size:13px; border-top:1px solid #000; padding:10px 0;">
-            <span>NAME: <b id="r-name">-</b></span>
-            <span>MONTH: <b id="r-month">-</b></span>
+    <div class="slip-container">
+        <div class="slip-header">
+            <h2 style="margin:0; color:var(--dark); letter-spacing:1px;">CHABAD HOUSE</h2>
+            <div style="font-size:12px; color:#64748b; font-weight:bold; margin-top:5px;">SALARY SLIP (PAYROLL)</div>
         </div>
-        <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size: 11px; text-align: center;">
-            <thead><tr style="background:#f1f5f9;"><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
+        
+        <div class="slip-row"><span>Employee Name:</span> <b id="r-name">-</b></div>
+        <div class="slip-row"><span>Salary Month:</span> <b id="r-month">-</b></div>
+        <div class="slip-row"><span>Base Salary:</span> <b id="r-base">-</b></div>
+
+        <table class="slip-table">
+            <thead><tr><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
             <tbody id="report-body"></tbody>
         </table>
-        
-        <table style="width:100%; border-collapse:collapse; margin-top:20px; font-size: 13px; border: 1px solid #eee;">
-            <tr style="background:#f8fafc;">
-                <td style="padding:10px;">Total Work Hours</td>
-                <td style="text-align:right; padding:10px;"><b id="rv-total-hrs">0:00</b></td>
-            </tr>
-            <tr>
-                <td style="padding:10px;">Standard (Salary)</td>
-                <td style="text-align:right; padding:10px;">234:00</td>
-            </tr>
-            <tr style="background:#fff1f2;">
-                <td style="padding:10px; color:var(--danger);">Extra OT Hours</td>
-                <td style="text-align:right; padding:10px;"><b id="rv-ot-hrs">0:00</b></td>
-            </tr>
-            <tr>
-                <td style="padding:10px;">OT Rate (57 Ks/hr)</td>
-                <td style="text-align:right; padding:10px;" id="rv-ot-calc">0</td>
-            </tr>
-            <tr style="background:#f0fdf4; border-top:2px solid var(--success);">
-                <td style="padding:12px; font-weight:bold;">Final Amount</td>
-                <td style="text-align:right; padding:12px; font-size:22px; font-weight:900; color:var(--success);" id="rv-grand-total">0</td>
-            </tr>
-        </table>
+
+        <div style="border-top: 2px dashed #cbd5e1; margin: 15px 0; padding-top: 10px;">
+            <div class="slip-row"><span>Total Work Hours:</span> <b id="rv-total-hrs">0:00</b></div>
+            <div class="slip-row"><span>Standard Hours:</span> <b>234:00</b></div>
+            <div class="slip-row"><span>Calculated Salary:</span> <b id="rv-pro-rata">0</b></div>
+            <div class="slip-row" style="color:var(--danger);"><span>Overtime (OT) Hours:</span> <b id="rv-ot-hrs">0:00</b></div>
+            <div class="slip-row" style="color:var(--danger);"><span>OT Rate (57 Ks/hr):</span> <b id="rv-ot-cash">0</b></div>
+        </div>
+
+        <div class="total-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:bold; font-size:14px;">TOTAL NET PAYABLE</span>
+                <span style="font-size:24px; font-weight:900;" id="rv-grand-total">0</span>
+            </div>
+        </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:30px 0;">
-        <button style="padding:18px; border-radius:15px; background:#64748b; color:white; border:none;" onclick="closeReport()">BACK</button>
-        <button style="padding:18px; border-radius:15px; background:var(--primary); color:white; border:none;" onclick="switchToEdit()">EDIT</button>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px auto; max-width:500px;">
+        <button style="padding:15px; border-radius:12px; background:#64748b; color:white; border:none; font-weight:bold;" onclick="closeReport()">BACK</button>
+        <button style="padding:15px; border-radius:12px; background:var(--primary); color:white; border:none; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
     </div>
 </div>
 
@@ -230,7 +226,6 @@
         active = el; active.classList.add('active');
         document.getElementById('keypad').classList.add('open');
         document.body.classList.add('keypad-open');
-        
         const headerHeight = 220;
         const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
         window.scrollTo({ top: elementPosition - headerHeight - 10, behavior: 'smooth' });
@@ -275,7 +270,7 @@
         document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
         document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = grand.toLocaleString();
-        return { otCash, grand };
+        return { totalMin, otMin, otCash, calculatedBase, grand };
     }
 
     function saveToDB() {
@@ -287,7 +282,7 @@
         db = db.filter(r => !(r.name === name && r.month === month));
         db.push(data);
         localStorage.setItem('chabad_records', JSON.stringify(db));
-        alert("ဒေတာ သိမ်းဆည်းပြီးပါပြီ။");
+        alert("သိမ်းဆည်းပြီးပါပြီ။");
     }
 
     function handleSearch() {
@@ -318,8 +313,7 @@
             let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
             db = db.filter(r => String(r.id) !== String(pendingDelId));
             localStorage.setItem('chabad_records', JSON.stringify(db));
-            cancelDelete();
-            handleSearch();
+            cancelDelete(); handleSearch();
         };
     }
     function cancelDelete() { document.getElementById('del-ui').style.display = 'none'; pendingDelId = null; }
@@ -341,11 +335,15 @@
         const d = calc(); closeK();
         document.getElementById('edit-view').style.display = 'none';
         document.getElementById('report-view').style.display = 'block';
+        
         document.getElementById('r-name').innerText = document.getElementById('user-name').value || "-";
         document.getElementById('r-month').innerText = document.getElementById('work-month').value || "-";
+        document.getElementById('r-base').innerText = parseInt(document.getElementById('base-salary').value).toLocaleString() + " Ks";
+        
         document.getElementById('rv-total-hrs').innerText = document.getElementById('gt').innerText;
+        document.getElementById('rv-pro-rata').innerText = d.calculatedBase.toLocaleString() + " Ks";
         document.getElementById('rv-ot-hrs').innerText = document.getElementById('ot').innerText;
-        document.getElementById('rv-ot-calc').innerText = "+ " + d.otCash.toLocaleString() + " Ks";
+        document.getElementById('rv-ot-cash').innerText = "+ " + d.otCash.toLocaleString() + " Ks";
         document.getElementById('rv-grand-total').innerText = d.grand.toLocaleString();
         
         const body = document.getElementById('report-body'); body.innerHTML = "";
