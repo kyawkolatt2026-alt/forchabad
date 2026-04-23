@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CHABAD HOUSE | Admin</title>
     <style>
-        :root { --bg: #f8fafc; --primary: #2563eb; --danger: #ef4444; --success: #16a34a; --grey: #94a3b8; --border: #e2e8f0; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 220px 10px 50px 10px; }
-        
-        /* Keypad ပွင့်ရင် အောက်ခြေမှာ နေရာလွတ်ပေးရန် */
-        body.keypad-open { padding-bottom: 350px; }
+        :root { --bg: #f8fafc; --primary: #2563eb; --danger: #ef4444; --success: #16a34a; --grey: #94a3b8; --border: #cbd5e1; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 220px 10px 50px 10px; transition: padding 0.3s; }
+        body.keypad-open { padding-bottom: 380px; }
 
         header { position: fixed; top: 0; left: 0; right: 0; background: #fff; z-index: 100; border-bottom: 2px solid #000; height: 210px; }
         .header-top { background: #000; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 5px 15px; }
@@ -21,48 +19,51 @@
         .pay-box { text-align: right; background: #dcfce7; padding: 5px 12px; border-radius: 10px; border: 2px solid var(--success); }
         .summary { display: grid; grid-template-columns: 1fr 1fr; background: #e2e8f0; padding: 6px 15px; font-size: 11px; font-weight: bold; }
 
-        .history-panel { background: #fff; margin: 10px 0; padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
-        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); box-sizing: border-box; font-size: 14px; }
-        #history-list { display: none; margin-top: 10px; }
+        /* Search Section */
+        .history-panel { background: #fff; margin: 10px 0; padding: 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); box-sizing: border-box; font-size: 14px; outline: none; }
+        #history-list { display: none; margin-top: 10px; max-height: 200px; overflow-y: auto; border-top: 1px solid #eee; }
         .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .data-table td { padding: 15px 8px; border-bottom: 1px solid var(--bg); vertical-align: middle; }
-        .btn-v { background: var(--primary); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; }
-        .btn-d { background: var(--danger); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; margin-left: 5px; }
+        .data-table td { padding: 12px 8px; border-bottom: 1px solid #f1f5f9; }
+        .btn-v { background: var(--primary); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; margin-right: 4px; }
+        .btn-d { background: var(--danger); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; }
 
-        .row { display: flex; align-items: center; padding: 10px; background: #fff; margin-bottom: 2px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); }
-        .day { width: 30px; font-weight: bold; color: #64748b; font-size: 14px; }
+        /* Rows */
+        .row { display: flex; align-items: center; padding: 10px; background: #fff; margin-bottom: 4px; border-radius: 8px; border: 1px solid #eee; }
+        .day { width: 30px; font-weight: bold; color: #64748b; }
         .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; }
-        .box { background: #fff; height: 42px; line-height: 42px; text-align: center; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; color: #334155; }
-        .box.active { border: 2.5px solid var(--primary); background: #f0f7ff; box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
+        .box { background: #fff; height: 42px; line-height: 42px; text-align: center; border-radius: 6px; border: 1px solid var(--border); font-weight: bold; font-size: 14px; }
+        .box.active { border: 2px solid var(--primary); background: #f0f7ff; }
 
-        /* Keypad Styling */
-        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 200; transform: translateY(100%); transition: 0.3s ease; border-top: 2px solid #000; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.1); }
+        /* Custom Modal */
+        #confirm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-box { background: #fff; padding: 25px; border-radius: 15px; width: 100%; max-width: 300px; text-align: center; }
+        .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+
+        /* Keypad */
+        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 200; transform: translateY(100%); transition: 0.3s; border-top: 2px solid #000; border-radius: 20px 20px 0 0; }
         .keypad.open { transform: translateY(0); }
         .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .key-grid button { 
-            padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; 
-            background: #f8fafc; transition: 0.1s; -webkit-tap-highlight-color: transparent;
-        }
-        .key-grid button:active { background: #dbeafe; transform: scale(0.92); border-color: var(--primary); }
+        .key-grid button { padding: 15px; font-size: 22px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; }
+        .key-grid button:active { background: #dbeafe; transform: scale(0.95); }
+        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 0 15px 15px 15px; }
+        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; }
 
-        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 15px 15px 15px; }
-        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; text-transform: uppercase; }
-        .ctrl-btns button:active { transform: scale(0.95); opacity: 0.8; }
-
+        /* Report */
         #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 500; overflow-y: auto; padding: 15px; }
-        .report-card { border: 1.5px solid #000; padding: 15px; background: #fff; border-radius: 8px; }
+        .report-card { border: 1.5px solid #000; padding: 15px; background: #fff; }
         .report-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         .report-table th, .report-table td { border: 1px solid #000; padding: 6px; text-align: center; font-size: 11px; }
-        .report-summary { background: #f8fafc; border: 1px dashed #475569; padding: 12px; margin-top: 10px; font-size: 13px; border-radius: 8px; }
+        .report-summary { background: #f8fafc; border: 1px dashed #475569; padding: 10px; margin-top: 10px; font-size: 13px; }
     </style>
 </head>
 <body onclick="handleBackdrop(event)">
 
 <div id="edit-view">
-    <header id="main-header">
+    <header>
         <div class="header-top">
-            <span style="font-weight:bold; letter-spacing: 1px;">CHABAD HOUSE</span>
-            <button onclick="confirmClear()" style="background:var(--danger); color:white; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight: bold;">NEW</button>
+            <span style="font-weight:bold;">CHABAD HOUSE</span>
+            <button onclick="confirmClear()" style="background:var(--danger); color:white; border:none; padding:4px 10px; border-radius:4px; font-size:11px;">NEW</button>
         </div>
         <div class="info-bar">
             <input type="text" id="user-name" placeholder="အမည်ရိုက်ပါ">
@@ -71,8 +72,8 @@
         <div class="input-bar">
             <input type="number" id="base-salary" value="12000" oninput="calc()">
             <div class="pay-box">
-                <small style="font-size: 9px; font-weight: bold;">NET SALARY</small>
-                <div id="final-pay" style="font-size:22px; font-weight:900; color:var(--success);">0</div>
+                <small>NET SALARY</small>
+                <div id="final-pay" style="font-size:20px; font-weight:900; color:var(--success);">0</div>
             </div>
         </div>
         <div class="summary">
@@ -82,7 +83,7 @@
     </header>
 
     <div class="history-panel">
-        <input type="text" id="search-box" placeholder="🔍 ရှာဖွေရန်..." oninput="handleSearch()">
+        <input type="text" id="search-box" placeholder="🔍 နာမည်ဖြင့် ရှာဖွေရန်..." oninput="handleSearch()">
         <div id="history-list">
             <table class="data-table">
                 <tbody id="history-table-body"></tbody>
@@ -93,10 +94,21 @@
     <div id="list"></div>
 </div>
 
+<div id="confirm-modal">
+    <div class="modal-box">
+        <h3 style="margin:0; color:var(--danger);">ဖျက်ရန် သေချာပါသလား?</h3>
+        <p style="font-size:14px; margin-top:10px;">ဤမှတ်တမ်းကို အပြီးအပိုင် ဖျက်ပါမည်။</p>
+        <div class="modal-btns">
+            <button style="padding:12px; border-radius:8px; border:none; background:#eee;" onclick="closeConfirm()">Cancel</button>
+            <button style="padding:12px; border-radius:8px; border:none; background:var(--danger); color:white; font-weight:bold;" id="btn-confirm-del">ဖျက်မည်</button>
+        </div>
+    </div>
+</div>
+
 <div id="report-view">
     <div class="report-card">
         <h2 style="text-align:center; margin:0; font-size: 18px;">CHABAD HOUSE</h2>
-        <p style="text-align:center; font-weight:bold; margin: 5px 0;">WORK STATEMENT</p>
+        <p style="text-align:center; font-weight:bold;">WORK STATEMENT</p>
         <div style="display:flex; justify-content: space-between; font-size:12px; border-top:1px solid #000; padding:10px 0;">
             <span>NAME: <b id="r-name">-</b></span>
             <span>MONTH: <b id="r-month">-</b></span>
@@ -106,16 +118,17 @@
             <tbody id="report-body"></tbody>
         </table>
         <div class="report-summary">
-            <div style="display:flex; justify-content:space-between;"><span>Total Hours:</span><b id="r-total-hrs">0:00</b></div>
-            <div style="display:flex; justify-content:space-between;"><span>OT Hours:</span><b id="r-ot-hrs">0:00</b></div>
-            <div style="display:flex; justify-content:space-between; color: var(--success); border-top: 1px solid #cbd5e1; margin-top:5px; padding-top:5px;"><span>OT Pay:</span><b id="r-ot-pay">0 MMK</b></div>
-            <div style="display:flex; justify-content:space-between;"><span>Base Salary:</span><b id="r-base-salary">0 MMK</b></div>
-            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; border-top:2.5px solid #000; margin-top:10px; padding-top:10px;"><span>NET PAYABLE:</span><span id="r-grand-total">0 MMK</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>Total Hrs:</span><b id="r-total-hrs">0:00</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>OT Hrs:</span><b id="r-ot-hrs">0:00</b></div>
+            <div style="display:flex; justify-content:space-between; color: var(--success);"><span>OT Pay:</span><b id="r-ot-pay">0</b></div>
+            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; border-top:2px solid #000; margin-top:10px; padding-top:10px;">
+                <span>NET PAY:</span><span id="r-grand-total">0 MMK</span>
+            </div>
         </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:25px 0;">
-        <button style="padding:16px; border:none; border-radius:12px; background:#64748b; color:white; font-weight:bold;" onclick="closeReport()">BACK</button>
-        <button style="padding:16px; border:none; border-radius:12px; background:var(--primary); color:white; font-weight:bold;" onclick="switchToEdit()">EDIT</button>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
+        <button style="padding:15px; border-radius:10px; background:#64748b; color:white; border:none;" onclick="closeReport()">BACK</button>
+        <button style="padding:15px; border-radius:10px; background:var(--primary); color:white; border:none;" onclick="switchToEdit()">EDIT</button>
     </div>
 </div>
 
@@ -135,9 +148,10 @@
 </div>
 
 <script>
-    let active = null; let boxes = [];
+    let active = null; let boxes = []; let pendingDelId = null;
     const list = document.getElementById('list');
 
+    // Generate 31 days
     for(let d=1; d<=31; d++) {
         const row = document.createElement('div');
         row.className = 'row';
@@ -146,7 +160,7 @@
             <div class="box" data-id="${(d-1)*4+1}" onclick="openK(event, this)"></div>
             <div class="box" data-id="${(d-1)*4+2}" onclick="openK(event, this)"></div>
             <div class="box" data-id="${(d-1)*4+3}" onclick="openK(event, this)"></div>
-        </div><div style="width:55px; text-align:right; font-weight:900; color:var(--primary); font-size:12px;" id="dh-${d}">0:00</div>`;
+        </div><div style="width:50px; text-align:right; font-weight:bold; color:var(--primary); font-size:11px;" id="dh-${d}">0:00</div>`;
         list.appendChild(row);
     }
     boxes = Array.from(document.querySelectorAll('.box'));
@@ -156,32 +170,95 @@
         calc();
     };
 
+    // SEARCH FUNCTION
+    function handleSearch() {
+        const query = document.getElementById('search-box').value.trim().toLowerCase();
+        const listDiv = document.getElementById('history-list');
+        const tableBody = document.getElementById('history-table-body');
+        
+        if (query.length > 0) {
+            const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+            const filtered = db.filter(r => r.name.toLowerCase().includes(query));
+            
+            if (filtered.length > 0) {
+                listDiv.style.display = 'block';
+                tableBody.innerHTML = filtered.map(r => `
+                    <tr>
+                        <td><b>${r.name}</b><br><small>${r.month}</small></td>
+                        <td style="text-align:right;">
+                            <button class="btn-v" onclick="previewRecord('${r.id}')">View</button>
+                            <button class="btn-d" onclick="askDelete('${r.id}')">Del</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else { tableBody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>မရှိပါ</td></tr>"; }
+        } else { listDiv.style.display = 'none'; }
+    }
+
+    function askDelete(id) { pendingDelId = id; document.getElementById('confirm-modal').style.display = 'flex'; }
+    function closeConfirm() { document.getElementById('confirm-modal').style.display = 'none'; }
+    document.getElementById('btn-confirm-del').onclick = () => {
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        db = db.filter(r => String(r.id) !== String(pendingDelId));
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        handleSearch(); closeConfirm();
+    };
+
+    function previewRecord(id) {
+        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        const r = db.find(item => String(item.id) === String(id));
+        if(!r) return;
+        document.getElementById('user-name').value = r.name;
+        document.getElementById('work-month').value = r.month;
+        document.getElementById('base-salary').value = r.salary;
+        r.hours.forEach((h, i) => { if(boxes[i]) boxes[i].innerText = h; });
+        calc(); 
+        document.getElementById('history-list').style.display = 'none';
+        document.getElementById('search-box').value = "";
+    }
+
+    // SAVE FUNCTION
+    function saveToDB() {
+        const name = document.getElementById('user-name').value.trim();
+        const month = document.getElementById('work-month').value;
+        if(!name) return alert("အမည်ထည့်ပါ။");
+        
+        const data = { 
+            id: Date.now(), 
+            name: name, 
+            month: month, 
+            salary: document.getElementById('base-salary').value, 
+            hours: boxes.map(b => b.innerText) 
+        };
+        
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        // နာမည်တူရှိရင် အဟောင်းကိုဖျက်ပြီး အသစ်သွင်း
+        db = db.filter(r => !(r.name === name && r.month === month));
+        db.push(data);
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        alert("သိမ်းဆည်းပြီးပါပြီ။");
+        closeK();
+    }
+
     function openK(e, el) {
         e.stopPropagation();
         if(active) active.classList.remove('active');
         active = el; active.classList.add('active');
-        
         document.getElementById('keypad').classList.add('open');
         document.body.classList.add('keypad-open');
-
-        // မြင်ရအောင် အပေါ်သို့ ဆွဲတင်ပေးခြင်း (Smooth Scroll)
+        
+        // Auto Scroll
         setTimeout(() => {
-            const headerHeight = 220; // Header ရဲ့ အမြင့်
-            const elPosition = el.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo({
-                top: elPosition - headerHeight - 10, 
-                behavior: 'smooth'
-            });
+            const y = el.getBoundingClientRect().top + window.pageYOffset - 230;
+            window.scrollTo({top: y, behavior: 'smooth'});
         }, 300);
     }
-
     function closeK() {
         if(active) active.classList.remove('active');
         document.getElementById('keypad').classList.remove('open');
         document.body.classList.remove('keypad-open');
         active = null;
     }
-
     function handleBackdrop(e) { if (!document.getElementById('keypad').contains(e.target)) closeK(); }
 
     function key(v) {
@@ -196,7 +273,6 @@
             if(n < boxes.length) boxes[n].click();
         }
     }
-
     function nextRow() {
         if(!active) return;
         let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4;
@@ -226,7 +302,7 @@
         document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
         document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = grand.toLocaleString();
-        return { otPay, base, grand };
+        return { otPay, grand };
     }
 
     function finishDraft() {
@@ -238,7 +314,6 @@
         document.getElementById('r-total-hrs').innerText = document.getElementById('gt').innerText;
         document.getElementById('r-ot-hrs').innerText = document.getElementById('ot').innerText;
         document.getElementById('r-ot-pay').innerText = d.otPay.toLocaleString() + " MMK";
-        document.getElementById('r-base-salary').innerText = d.base.toLocaleString() + " MMK";
         document.getElementById('r-grand-total').innerText = d.grand.toLocaleString() + " MMK";
         const body = document.getElementById('report-body'); body.innerHTML = "";
         for(let d=1; d<=31; d++) {
@@ -250,20 +325,10 @@
         }
     }
 
-    function saveToDB() {
-        const name = document.getElementById('user-name').value.trim();
-        const month = document.getElementById('work-month').value;
-        if(!name) return alert("အမည်ထည့်ပါ။");
-        const data = { id: Date.now(), name: name, month: month, salary: document.getElementById('base-salary').value, hours: boxes.map(b => b.innerText) };
-        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
-        db.push(data);
-        localStorage.setItem('chabad_records', JSON.stringify(db));
-        alert("သိမ်းဆည်းပြီးပါပြီ။");
-    }
-
     function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
     function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
 </body>
 </html>
+a
