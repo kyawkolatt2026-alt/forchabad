@@ -5,75 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CHABAD HOUSE | Admin</title>
     <style>
-        :root { --bg: #f1f5f9; --primary: #2563eb; --danger: #ef4444; --success: #16a34a; --grey: #64748b; }
+        :root { --bg: #f8fafc; --primary: #2563eb; --danger: #ef4444; --success: #16a34a; --grey: #94a3b8; --border: #e2e8f0; }
         body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 220px 10px 50px 10px; }
-        body.keypad-open { padding-bottom: 420px; }
+        
+        /* Keypad ပွင့်ရင် အောက်ခြေမှာ နေရာလွတ်ပေးရန် */
+        body.keypad-open { padding-bottom: 350px; }
 
         header { position: fixed; top: 0; left: 0; right: 0; background: #fff; z-index: 100; border-bottom: 2px solid #000; height: 210px; }
         .header-top { background: #000; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 5px 15px; }
         .info-bar { display: flex; gap: 5px; padding: 8px 10px 0 10px; }
-        .info-bar input { border: 1px solid #cbd5e1; border-radius: 5px; padding: 8px; font-size: 14px; outline: none; flex: 1; }
+        .info-bar input { border: 1px solid var(--border); border-radius: 5px; padding: 8px; font-size: 14px; outline: none; flex: 1; }
         #user-name { border: 2px solid var(--primary); }
         .input-bar { padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; }
         #base-salary { width: 90px; padding: 8px; border: 2px solid #000; border-radius: 8px; font-weight: bold; font-size: 18px; }
         .pay-box { text-align: right; background: #dcfce7; padding: 5px 12px; border-radius: 10px; border: 2px solid var(--success); }
         .summary { display: grid; grid-template-columns: 1fr 1fr; background: #e2e8f0; padding: 6px 15px; font-size: 11px; font-weight: bold; }
 
-        /* History List */
-        .history-panel { background: #fff; margin: 10px 0; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1; }
-        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--grey); box-sizing: border-box; font-size: 14px; }
+        .history-panel { background: #fff; margin: 10px 0; padding: 12px; border-radius: 10px; border: 1px solid var(--border); }
+        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); box-sizing: border-box; font-size: 14px; }
         #history-list { display: none; margin-top: 10px; }
         .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .data-table td { padding: 15px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .data-table td { padding: 15px 8px; border-bottom: 1px solid var(--bg); vertical-align: middle; }
         .btn-v { background: var(--primary); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; }
         .btn-d { background: var(--danger); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; margin-left: 5px; }
 
-        /* Custom Modal */
-        #confirm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-box { background: #fff; padding: 25px; border-radius: 15px; width: 100%; max-width: 300px; text-align: center; }
-        .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .m-btn { padding: 12px; border-radius: 8px; border: none; font-weight: bold; color: #fff; }
+        .row { display: flex; align-items: center; padding: 10px; background: #fff; margin-bottom: 2px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); }
+        .day { width: 30px; font-weight: bold; color: #64748b; font-size: 14px; }
+        .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; }
+        .box { background: #fff; height: 42px; line-height: 42px; text-align: center; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 14px; color: #334155; }
+        .box.active { border: 2.5px solid var(--primary); background: #f0f7ff; box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
 
-        /* List Rows */
-        .row { display: flex; align-items: center; padding: 10px; background: #fff; margin-bottom: 2px; border-radius: 8px; }
-        .day { width: 30px; font-weight: bold; color: var(--grey); }
-        .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; flex: 1; }
-        .box { background: #f8fafc; height: 45px; line-height: 45px; text-align: center; border-radius: 6px; border: 1.5px solid #cbd5e1; font-weight: bold; font-size: 14px; }
-        .box.active { border-color: var(--primary); background: #eff6ff; border-width: 3px; }
-
-        /* Keypad */
-        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 200; transform: translateY(100%); transition: 0.3s; border-top: 3px solid #000; border-radius: 15px 15px 0 0; }
+        /* Keypad Styling */
+        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 200; transform: translateY(100%); transition: 0.3s ease; border-top: 2px solid #000; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.1); }
         .keypad.open { transform: translateY(0); }
-        .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 15px; }
-        .key-grid button { padding: 15px; font-size: 22px; font-weight: bold; border-radius: 10px; border: 1.5px solid #000; background: #f1f5f9; }
-        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 0 15px 15px 15px; }
-        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 11px; }
+        .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
+        .key-grid button { 
+            padding: 16px; font-size: 22px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; 
+            background: #f8fafc; transition: 0.1s; -webkit-tap-highlight-color: transparent;
+        }
+        .key-grid button:active { background: #dbeafe; transform: scale(0.92); border-color: var(--primary); }
 
-        /* Report Styles */
+        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 15px 15px 15px; }
+        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; text-transform: uppercase; }
+        .ctrl-btns button:active { transform: scale(0.95); opacity: 0.8; }
+
         #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 500; overflow-y: auto; padding: 15px; }
-        .report-card { border: 2px solid #000; padding: 15px; background: #fff; border-radius: 5px; }
+        .report-card { border: 1.5px solid #000; padding: 15px; background: #fff; border-radius: 8px; }
         .report-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         .report-table th, .report-table td { border: 1px solid #000; padding: 6px; text-align: center; font-size: 11px; }
-        .report-summary { background: #f8fafc; border: 1px dashed #000; padding: 10px; margin-top: 10px; font-size: 13px; line-height: 1.6; }
+        .report-summary { background: #f8fafc; border: 1px dashed #475569; padding: 12px; margin-top: 10px; font-size: 13px; border-radius: 8px; }
     </style>
 </head>
 <body onclick="handleBackdrop(event)">
 
 <div id="edit-view">
-    <header>
+    <header id="main-header">
         <div class="header-top">
-            <span style="font-weight:bold; font-size:14px;">CHABAD HOUSE</span>
-            <button onclick="confirmClear()" style="background:var(--danger); color:white; border:none; padding:4px 10px; border-radius:4px; font-size:11px;">NEW</button>
+            <span style="font-weight:bold; letter-spacing: 1px;">CHABAD HOUSE</span>
+            <button onclick="confirmClear()" style="background:var(--danger); color:white; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight: bold;">NEW</button>
         </div>
         <div class="info-bar">
-            <input type="text" id="user-name" placeholder="အမည်">
+            <input type="text" id="user-name" placeholder="အမည်ရိုက်ပါ">
             <input type="month" id="work-month">
         </div>
         <div class="input-bar">
             <input type="number" id="base-salary" value="12000" oninput="calc()">
             <div class="pay-box">
-                <small>NET SALARY</small>
-                <div id="final-pay" style="font-size:20px; font-weight:900; color:var(--success);">0</div>
+                <small style="font-size: 9px; font-weight: bold;">NET SALARY</small>
+                <div id="final-pay" style="font-size:22px; font-weight:900; color:var(--success);">0</div>
             </div>
         </div>
         <div class="summary">
@@ -83,7 +82,7 @@
     </header>
 
     <div class="history-panel">
-        <input type="text" id="search-box" placeholder="🔍 နာမည်ဖြင့်ရှာဖွေရန်..." oninput="handleSearch()">
+        <input type="text" id="search-box" placeholder="🔍 ရှာဖွေရန်..." oninput="handleSearch()">
         <div id="history-list">
             <table class="data-table">
                 <tbody id="history-table-body"></tbody>
@@ -94,61 +93,29 @@
     <div id="list"></div>
 </div>
 
-<div id="confirm-modal">
-    <div class="modal-box">
-        <h3 style="margin:0; color:var(--danger);">ဖျက်ရန် သေချာပါသလား?</h3>
-        <p style="font-size:14px; color:var(--grey); margin-top:10px;">ဒေတာများကို အပြီးအပိုင်ဖျက်ပါမည်။</p>
-        <div class="modal-btns">
-            <button class="m-btn" style="background:var(--grey);" onclick="closeConfirm()">မဖျက်တော့ပါ</button>
-            <button class="m-btn" style="background:var(--danger);" id="btn-confirm-del">ဖျက်မည်</button>
-        </div>
-    </div>
-</div>
-
 <div id="report-view">
     <div class="report-card">
         <h2 style="text-align:center; margin:0; font-size: 18px;">CHABAD HOUSE</h2>
         <p style="text-align:center; font-weight:bold; margin: 5px 0;">WORK STATEMENT</p>
-        
-        <div style="display:flex; justify-content: space-between; font-size:12px; border-top:1px solid #000; padding:8px 0;">
+        <div style="display:flex; justify-content: space-between; font-size:12px; border-top:1px solid #000; padding:10px 0;">
             <span>NAME: <b id="r-name">-</b></span>
             <span>MONTH: <b id="r-month">-</b></span>
         </div>
-
         <table class="report-table">
-            <thead>
-                <tr><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr>
-            </thead>
+            <thead><tr><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
             <tbody id="report-body"></tbody>
         </table>
-
         <div class="report-summary">
-            <div style="display:flex; justify-content:space-between;">
-                <span>Total Work Hours:</span>
-                <b id="r-total-hrs">0:00</b>
-            </div>
-            <div style="display:flex; justify-content:space-between;">
-                <span>OT Hours (Over 234):</span>
-                <b id="r-ot-hrs">0:00</b>
-            </div>
-            <div style="display:flex; justify-content:space-between; color: var(--success); border-top: 1px solid #ccc; margin-top:5px; padding-top:5px;">
-                <span>OT Pay (OT Hr x 57):</span>
-                <b id="r-ot-pay">0 MMK</b>
-            </div>
-            <div style="display:flex; justify-content:space-between;">
-                <span>Base Salary:</span>
-                <b id="r-base-salary">0 MMK</b>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; border-top:2px solid #000; margin-top:8px; padding-top:8px;">
-                <span>NET PAYABLE:</span>
-                <span id="r-grand-total">0 MMK</span>
-            </div>
+            <div style="display:flex; justify-content:space-between;"><span>Total Hours:</span><b id="r-total-hrs">0:00</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>OT Hours:</span><b id="r-ot-hrs">0:00</b></div>
+            <div style="display:flex; justify-content:space-between; color: var(--success); border-top: 1px solid #cbd5e1; margin-top:5px; padding-top:5px;"><span>OT Pay:</span><b id="r-ot-pay">0 MMK</b></div>
+            <div style="display:flex; justify-content:space-between;"><span>Base Salary:</span><b id="r-base-salary">0 MMK</b></div>
+            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; border-top:2.5px solid #000; margin-top:10px; padding-top:10px;"><span>NET PAYABLE:</span><span id="r-grand-total">0 MMK</span></div>
         </div>
     </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
-        <button style="padding:15px; border:none; border-radius:10px; background:var(--grey); color:white; font-weight:bold;" onclick="closeReport()">BACK</button>
-        <button style="padding:15px; border:none; border-radius:10px; background:var(--primary); color:white; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:25px 0;">
+        <button style="padding:16px; border:none; border-radius:12px; background:#64748b; color:white; font-weight:bold;" onclick="closeReport()">BACK</button>
+        <button style="padding:16px; border:none; border-radius:12px; background:var(--primary); color:white; font-weight:bold;" onclick="switchToEdit()">EDIT</button>
     </div>
 </div>
 
@@ -157,18 +124,18 @@
         <button onclick="key(1)">1</button><button onclick="key(2)">2</button><button onclick="key(3)">3</button>
         <button onclick="key(4)">4</button><button onclick="key(5)">5</button><button onclick="key(6)">6</button>
         <button onclick="key(7)">7</button><button onclick="key(8)">8</button><button onclick="key(9)">9</button>
-        <button onclick="key('AC')">AC</button><button onclick="key(0)">0</button><button onclick="key('DEL')">⌫</button>
+        <button onclick="key('AC')" style="color:var(--danger)">AC</button><button onclick="key(0)">0</button><button onclick="key('DEL')">⌫</button>
     </div>
     <div class="ctrl-btns">
-        <button onclick="closeK()" style="background:var(--grey);">DONE</button>
-        <button onclick="nextRow()" style="background:black;">NEXT</button>
+        <button onclick="closeK()" style="background:#64748b;">DONE</button>
+        <button onclick="nextRow()" style="background:#1e293b;">NEXT</button>
         <button onclick="saveToDB()" style="background:var(--primary);">SAVE</button>
         <button onclick="finishDraft()" style="background:var(--success);">PREVIEW</button>
     </div>
 </div>
 
 <script>
-    let active = null; let boxes = []; let pendingDeleteId = null;
+    let active = null; let boxes = [];
     const list = document.getElementById('list');
 
     for(let d=1; d<=31; d++) {
@@ -179,7 +146,7 @@
             <div class="box" data-id="${(d-1)*4+1}" onclick="openK(event, this)"></div>
             <div class="box" data-id="${(d-1)*4+2}" onclick="openK(event, this)"></div>
             <div class="box" data-id="${(d-1)*4+3}" onclick="openK(event, this)"></div>
-        </div><div style="width:55px; text-align:right; font-weight:bold; color:var(--primary); font-size:11px;" id="dh-${d}">0:00</div>`;
+        </div><div style="width:55px; text-align:right; font-weight:900; color:var(--primary); font-size:12px;" id="dh-${d}">0:00</div>`;
         list.appendChild(row);
     }
     boxes = Array.from(document.querySelectorAll('.box'));
@@ -189,79 +156,32 @@
         calc();
     };
 
-    function handleSearch() {
-        const query = document.getElementById('search-box').value.trim().toLowerCase();
-        const historyPanel = document.getElementById('history-list');
-        const tableBody = document.getElementById('history-table-body');
-        if (query.length > 0) {
-            const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
-            const filtered = db.filter(r => r.name.toLowerCase().includes(query));
-            if (filtered.length > 0) {
-                historyPanel.style.display = 'block';
-                tableBody.innerHTML = "";
-                filtered.forEach(r => {
-                    tableBody.innerHTML += `<tr>
-                        <td><b>${r.name}</b><br><small>${r.month}</small></td>
-                        <td style="text-align:right; white-space:nowrap;">
-                            <button class="btn-v" onclick="previewRecord(${r.id})">ကြည့်ရန်</button>
-                            <button class="btn-d" onclick="askDelete(${r.id})">ဖျက်ရန်</button>
-                        </td>
-                    </tr>`;
-                });
-            } else { tableBody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>ရှာမတွေ့ပါ</td></tr>"; }
-        } else { historyPanel.style.display = 'none'; }
-    }
-
-    function askDelete(id) { pendingDeleteId = id; document.getElementById('confirm-modal').style.display = 'flex'; }
-    function closeConfirm() { document.getElementById('confirm-modal').style.display = 'none'; pendingDeleteId = null; }
-    document.getElementById('btn-confirm-del').onclick = () => {
-        if(pendingDeleteId) {
-            let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
-            db = db.filter(r => r.id !== pendingDeleteId);
-            localStorage.setItem('chabad_records', JSON.stringify(db));
-            handleSearch(); closeConfirm();
-        }
-    };
-
-    function previewRecord(id) {
-        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
-        const r = db.find(item => item.id === id);
-        if(!r) return;
-        document.getElementById('user-name').value = r.name;
-        document.getElementById('work-month').value = r.month;
-        document.getElementById('base-salary').value = r.salary;
-        r.hours.forEach((h, i) => { if(boxes[i]) boxes[i].innerText = h; });
-        calc();
-        finishDraft();
-        document.getElementById('history-list').style.display = 'none';
-        document.getElementById('search-box').value = "";
-    }
-
-    function saveToDB() {
-        const name = document.getElementById('user-name').value.trim();
-        const month = document.getElementById('work-month').value;
-        if(!name) return alert("အမည်ထည့်ပါ။");
-        const data = { id: Date.now(), name: name, month: month, salary: document.getElementById('base-salary').value, hours: boxes.map(b => b.innerText) };
-        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
-        const idx = db.findIndex(r => r.name === name && r.month === month);
-        if(idx > -1) db[idx] = data; else db.push(data);
-        localStorage.setItem('chabad_records', JSON.stringify(db));
-        alert("သိမ်းဆည်းပြီးပါပြီ။");
-    }
-
     function openK(e, el) {
         e.stopPropagation();
         if(active) active.classList.remove('active');
         active = el; active.classList.add('active');
+        
         document.getElementById('keypad').classList.add('open');
         document.body.classList.add('keypad-open');
+
+        // မြင်ရအောင် အပေါ်သို့ ဆွဲတင်ပေးခြင်း (Smooth Scroll)
+        setTimeout(() => {
+            const headerHeight = 220; // Header ရဲ့ အမြင့်
+            const elPosition = el.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({
+                top: elPosition - headerHeight - 10, 
+                behavior: 'smooth'
+            });
+        }, 300);
     }
+
     function closeK() {
         if(active) active.classList.remove('active');
         document.getElementById('keypad').classList.remove('open');
         document.body.classList.remove('keypad-open');
         active = null;
     }
+
     function handleBackdrop(e) { if (!document.getElementById('keypad').contains(e.target)) closeK(); }
 
     function key(v) {
@@ -276,6 +196,7 @@
             if(n < boxes.length) boxes[n].click();
         }
     }
+
     function nextRow() {
         if(!active) return;
         let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4;
@@ -302,31 +223,24 @@
         let otMin = totalMin > (234*60) ? totalMin - (234*60) : 0;
         let otPay = Math.round((otMin/60)*57);
         let grand = base + otPay;
-        
         document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
         document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = grand.toLocaleString();
-        return { totalMin, otMin, otPay, base, grand };
+        return { otPay, base, grand };
     }
 
     function finishDraft() {
-        const data = calc();
-        closeK();
+        const d = calc(); closeK();
         document.getElementById('edit-view').style.display = 'none';
         document.getElementById('report-view').style.display = 'block';
-        
         document.getElementById('r-name').innerText = document.getElementById('user-name').value || "-";
         document.getElementById('r-month').innerText = document.getElementById('work-month').value || "-";
-        
-        // Detailed summary in report
         document.getElementById('r-total-hrs').innerText = document.getElementById('gt').innerText;
         document.getElementById('r-ot-hrs').innerText = document.getElementById('ot').innerText;
-        document.getElementById('r-ot-pay').innerText = data.otPay.toLocaleString() + " MMK";
-        document.getElementById('r-base-salary').innerText = data.base.toLocaleString() + " MMK";
-        document.getElementById('r-grand-total').innerText = data.grand.toLocaleString() + " MMK";
-
-        const body = document.getElementById('report-body');
-        body.innerHTML = "";
+        document.getElementById('r-ot-pay').innerText = d.otPay.toLocaleString() + " MMK";
+        document.getElementById('r-base-salary').innerText = d.base.toLocaleString() + " MMK";
+        document.getElementById('r-grand-total').innerText = d.grand.toLocaleString() + " MMK";
+        const body = document.getElementById('report-body'); body.innerHTML = "";
         for(let d=1; d<=31; d++) {
             let timeStr = document.getElementById(`dh-${d}`).innerText;
             if(timeStr !== "0:00") {
@@ -334,6 +248,17 @@
                 body.innerHTML += `<tr><td>${d}</td><td>${b[0]}-${b[1]}</td><td>${b[2]}-${b[3]}</td><td><b>${timeStr}</b></td></tr>`;
             }
         }
+    }
+
+    function saveToDB() {
+        const name = document.getElementById('user-name').value.trim();
+        const month = document.getElementById('work-month').value;
+        if(!name) return alert("အမည်ထည့်ပါ။");
+        const data = { id: Date.now(), name: name, month: month, salary: document.getElementById('base-salary').value, hours: boxes.map(b => b.innerText) };
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        db.push(data);
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        alert("သိမ်းဆည်းပြီးပါပြီ။");
     }
 
     function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
