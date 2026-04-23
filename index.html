@@ -16,6 +16,7 @@
             --text-main: #334155; 
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --gold: #f59e0b;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: var(--bg); margin: 0; padding: 220px 10px 100px 10px; color: var(--text-main); transition: 0.3s; overflow-x: hidden; }
@@ -58,7 +59,27 @@
         .info-bar input { border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; flex: 1; outline: none; background: #fff; }
         
         .input-bar { padding: 8px 0; display: flex; justify-content: space-between; align-items: center; }
-        #base-salary { width: 100px; padding: 8px; border: 2px solid var(--border); border-radius: 10px; font-weight: bold; font-size: 20px; text-align: center; color: var(--primary); background: #fff; }
+        
+        /* လစာအကွက် ပုံစံအသစ် */
+        #base-salary { 
+            width: 110px; 
+            padding: 8px; 
+            border: 2.5px solid var(--gold); 
+            border-radius: 12px; 
+            font-weight: 900; 
+            font-size: 22px; 
+            text-align: center; 
+            color: var(--dark); 
+            background: #fffdf5; 
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+            outline: none;
+            transition: 0.3s;
+        }
+        #base-salary:focus {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            background: #fff;
+            transform: scale(1.05);
+        }
         
         .pay-box { text-align: right; background: #ecfdf5; padding: 6px 12px; border-radius: 10px; border: 1.5px solid var(--success); min-width: 140px; box-shadow: var(--shadow-sm); }
         .pay-label { font-size: 10px; color: var(--success); font-weight: 700; text-transform: uppercase; }
