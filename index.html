@@ -51,7 +51,7 @@
         @keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 1px rgba(245, 158, 11, 0.4)); } 50% { filter: drop-shadow(0 0 5px rgba(37, 99, 235, 0.6)); } }
         
         .btn-top { width: 75px; height: 32px; border: none; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; color: #fff; text-transform: uppercase; transition: transform 0.1s; }
-        .btn-help { background: var(--primary); } /* ပြောင်းလဲထားသော အပြာရောင် */
+        .btn-help { background: var(--primary); } 
         .btn-new { background: var(--danger); }
 
         .info-bar { display: flex; gap: 8px; padding: 10px 0 0 0; }
@@ -134,6 +134,9 @@
     <div id="guide-modal" onclick="toggleGuide(event)">
         <div class="guide-content" onclick="event.stopPropagation()">
             <h2 style="text-align:center; color:var(--dark); margin-top:0;">အသုံးပြုပုံလမ်းညွှန်</h2>
+            <div class="guide-item" style="border-left: 5px solid var(--success); background: #f0fdf4; padding: 10px; font-weight: 700;">
+                Chabad ဝန်ထမ်းများလစာတွက်ထုတ်လို့လွယ်ကူအောင်ရေးသားပေးထားပါသည်
+            </div>
             <div class="guide-item"><b>၁။ လစာပြင်ခြင်း:</b> လစာ ၁၂၀၀၀ နေရာတွင် နှိပ်၍ မိမိစိတ်ကြိုက် ပြောင်းလဲနိုင်ပါသည်။</div>
             <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ်သုံးရန်။</div>
             <div class="guide-item"><b>၃။ စံနှုန်း:</b> တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> သတ်မှတ်ထားပါသည်။</div>
@@ -313,12 +316,7 @@
         } else { listDiv.style.display = 'none'; }
     }
 
-    function askDelete(id) { 
-        pendingDelId = id; 
-        document.getElementById('del-ui').style.display = 'block';
-        // Scroll issue fixed: scrollIntoView functions removed.
-    }
-    
+    function askDelete(id) { pendingDelId = id; document.getElementById('del-ui').style.display = 'block'; }
     function cancelDelete() { document.getElementById('del-ui').style.display = 'none'; pendingDelId = null; }
     
     document.getElementById('confirm-del-btn').onclick = function() {
