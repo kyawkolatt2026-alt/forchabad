@@ -6,55 +6,69 @@
     <title>CHABAD HOUSE | Payroll Pro</title>
     <style>
         :root { 
-            --bg: #f8fafc; --primary: #3b82f6; --danger: #ef4444; 
-            --success: #10b981; --dark: #0f172a; --border: #cbd5e1;
+            --bg: #f1f5f9; 
+            --header-bg: #ffffff;
+            --primary: #2563eb; 
+            --danger: #dc2626; 
+            --success: #16a34a; 
+            --dark: #1e293b; 
+            --border: #cbd5e1; 
+            --text-main: #334155; 
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: sans-serif; }
-        body { background: var(--bg); margin: 0; padding: 230px 10px 100px 10px; color: var(--dark); transition: 0.3s; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: var(--bg); margin: 0; padding: 220px 10px 100px 10px; color: var(--text-main); transition: 0.3s; overflow-x: hidden; }
         body.keypad-open { padding-bottom: 400px; }
 
         header { 
             position: fixed; top: 0; left: 0; right: 0; 
-            background: #fff; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-            height: 220px; border-bottom: 3px solid var(--dark);
+            background: var(--header-bg); z-index: 1000; 
+            box-shadow: var(--shadow-md); 
+            height: 210px; 
+            border-bottom: 2px solid var(--border);
+            padding: 10px;
         }
         .header-top { 
-            background: var(--dark); color: #fff; 
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 8px 12px; 
+            display: grid; grid-template-columns: 80px 1fr 80px; 
+            align-items: center; padding: 0 5px 10px 5px; 
+            border-bottom: 1px solid #f1f5f9;
         }
         
-        .marquee-container { flex: 1; text-align: center; margin: 0 10px; overflow: hidden; }
+        .marquee-container { grid-column: 2; text-align: center; }
         .header-title { 
-            display: inline-block; font-weight: 900; font-size: 19px;
-            letter-spacing: 1px;
-            background: linear-gradient(90deg, #3b82f6, #facc15, #3b82f6);
+            display: inline-block; font-weight: 800; font-size: 20px;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #2563eb, #f59e0b, #2563eb);
             background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: gradientMove 4s linear infinite, glowPulse 2s ease-in-out infinite;
+            text-transform: uppercase;
+            animation: gradientMove 6s linear infinite, glowPulse 3s ease-in-out infinite;
         }
         @keyframes gradientMove { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-        @keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5)); } 50% { filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8)); } }
-
-        .btn-top { width: 75px; height: 35px; border: none; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; color: #fff; }
-        .btn-help { background: var(--primary); }
+        @keyframes glowPulse { 0%, 100% { filter: drop-shadow(0 0 1px rgba(245, 158, 11, 0.4)); } 50% { filter: drop-shadow(0 0 5px rgba(37, 99, 235, 0.6)); } }
+        
+        .btn-top { width: 75px; height: 32px; border: none; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; color: #fff; text-transform: uppercase; transition: transform 0.1s; }
+        .btn-help { background: var(--primary); } /* ပြောင်းလဲထားသော အပြာရောင် */
         .btn-new { background: var(--danger); }
 
-        .info-bar { display: flex; gap: 8px; padding: 12px 12px 0 12px; }
-        .info-bar input { border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; flex: 1; outline: none; }
+        .info-bar { display: flex; gap: 8px; padding: 10px 0 0 0; }
+        .info-bar input { border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; flex: 1; outline: none; background: #fff; }
         
-        .input-bar { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
-        #base-salary { width: 100px; padding: 8px; border: 2px solid var(--dark); border-radius: 10px; font-weight: bold; font-size: 20px; text-align: center; color: var(--primary); }
-        .pay-box { text-align: right; background: #ecfdf5; padding: 6px 12px; border-radius: 12px; border: 1.5px solid var(--success); }
-        .pay-label { font-size: 9px; color: var(--success); font-weight: bold; }
-        .summary { display: grid; grid-template-columns: 1fr 1fr; background: #f1f5f9; padding: 10px 15px; font-size: 13px; font-weight: 700; border-top: 1px solid var(--border); }
+        .input-bar { padding: 8px 0; display: flex; justify-content: space-between; align-items: center; }
+        #base-salary { width: 100px; padding: 8px; border: 2px solid var(--border); border-radius: 10px; font-weight: bold; font-size: 20px; text-align: center; color: var(--primary); background: #fff; }
+        
+        .pay-box { text-align: right; background: #ecfdf5; padding: 6px 12px; border-radius: 10px; border: 1.5px solid var(--success); min-width: 140px; box-shadow: var(--shadow-sm); }
+        .pay-label { font-size: 10px; color: var(--success); font-weight: 700; text-transform: uppercase; }
+        
+        .summary { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); padding: 8px 15px; font-size: 13px; font-weight: 700; border-top: 1px solid var(--border); border-radius: 8px; margin-top: 5px; }
 
-        .row { display: flex; align-items: center; padding: 12px; background: #fff; margin-bottom: 8px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .day { width: 35px; font-weight: 800; color: #64748b; font-size: 16px; }
-        .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; }
-        .box { background: #f8fafc; height: 45px; line-height: 45px; text-align: center; border-radius: 10px; border: 1.5px solid #cbd5e1; font-weight: bold; font-size: 14px; }
+        .row { display: flex; align-items: center; padding: 10px; background: #fff; margin-bottom: 6px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm); }
+        .day { width: 35px; font-weight: 800; color: #64748b; font-size: 16px; text-align: center; }
+        .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; flex: 1; }
+        .box { background: #f8fafc; height: 42px; line-height: 42px; text-align: center; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 14px; color: var(--dark); }
         .box.active { border-color: var(--primary); background: #eff6ff; border-width: 2px; }
 
         .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 2000; transform: translateY(100%); transition: 0.3s; border-top: 4px solid var(--dark); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.2); }
@@ -62,32 +76,29 @@
         .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
         .key-grid button { padding: 15px; font-size: 24px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; }
         .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 15px 15px 15px; }
-        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; }
+        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; text-transform: uppercase; }
 
-        .del-confirm { display: none; background: #fff5f5; border: 2px solid var(--danger); padding: 15px; border-radius: 12px; margin-top: 10px; text-align: center; }
+        .del-confirm { display: none; background: #fff1f2; border: 2px solid var(--danger); padding: 15px; border-radius: 12px; margin-top: 10px; text-align: center; }
         .del-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .btn-confirm { background: var(--danger); color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; }
-        .btn-cancel { background: #64748b; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; }
+        .btn-confirm { background: var(--danger); color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; font-size: 12px; }
+        .btn-cancel { background: #64748b; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; font-size: 12px; }
 
         #guide-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; padding: 20px; align-items: center; justify-content: center; }
         .guide-content { background: #fff; padding: 25px; border-radius: 20px; width: 100%; max-height: 85vh; overflow-y: auto; }
         .guide-item { margin-bottom: 18px; font-size: 14px; border-left: 5px solid var(--primary); padding-left: 12px; line-height: 1.6; }
 
-        .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 14px; color: var(--dark); font-weight: 900; z-index: 50; background: #fff; padding: 6px 15px; border-radius: 50px; border: 2px solid var(--primary); }
-
-        /* --- NEW SLIP DESIGN STYLES --- */
+        .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 13px; color: var(--dark); font-weight: 800; z-index: 50; background: #fff; padding: 6px 15px; border-radius: 50px; border: 2px solid var(--dark); }
+        
         #report-view { display: none; position: fixed; inset: 0; background: #f1f5f9; z-index: 4000; overflow-y: auto; padding: 10px; }
-        .slip-container { background: #fff; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 20px; border-top: 8px solid var(--dark); max-width: 500px; margin: 0 auto; }
+        .slip-container { background: #fff; border-radius: 15px; padding: 20px; border-top: 8px solid var(--dark); max-width: 500px; margin: 10px auto; }
         .slip-header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 15px; }
         .slip-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
-        .slip-row b { color: var(--dark); }
-        .slip-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; }
-        .slip-table th { background: #f8fafc; padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0; }
+        .slip-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; text-align: center; }
+        .slip-table th { background: #f1f5f9; padding: 10px; border-bottom: 2px solid #e2e8f0; }
         .slip-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
         .total-section { background: var(--dark); color: #fff; padding: 15px; border-radius: 10px; margin-top: 15px; }
-        /* ------------------------------ */
         
-        .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; }
+        .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; text-transform: uppercase; }
         .btn-view { background: var(--primary); }
         .btn-del { background: var(--danger); }
     </style>
@@ -98,7 +109,9 @@
     <header>
         <div class="header-top">
             <button class="btn-top btn-help" onclick="toggleGuide(event)">လမ်းညွှန်</button>
-            <div class="marquee-container"><div class="header-title">CHABAD HOUSE PAYROLL</div></div>
+            <div class="marquee-container">
+                <div class="header-title">CHABAD HOUSE PAYROLL</div>
+            </div>
             <button class="btn-top btn-new" onclick="confirmClear()">NEW</button>
         </div>
         <div class="info-bar">
@@ -108,7 +121,7 @@
         <div class="input-bar">
             <input type="number" id="base-salary" value="12000" oninput="calc()">
             <div class="pay-box">
-                <div class="pay-label">Net Payable</div>
+                <div class="pay-label">Net Payable Ks</div>
                 <div id="final-pay" style="font-size:24px; font-weight:900; color:var(--success);">0</div>
             </div>
         </div>
@@ -130,18 +143,18 @@
         </div>
     </div>
 
-    <div style="background: #fff; margin: 15px 0; padding: 15px; border-radius: 15px;">
-        <input type="text" id="search-box" placeholder="🔍 အမည်ဖြင့် ရှာဖွေရန်..." oninput="handleSearch()" style="width:100%; padding:12px; border-radius:10px; border:2px solid #e2e8f0; outline:none; font-size:15px;">
+    <div style="background: #fff; margin: 15px 0; padding: 15px; border-radius: 15px; box-shadow: var(--shadow-sm);">
+        <input type="text" id="search-box" placeholder="🔍 ဝန်ထမ်းအမည်ဖြင့် ရှာဖွေရန်..." oninput="handleSearch()" style="width:100%; padding:12px; border-radius:10px; border:2px solid #e2e8f0; outline:none; font-size:15px; background:#fcfcfc;">
         
         <div id="del-ui" class="del-confirm">
-            <div style="font-weight:bold; color:var(--danger);">ဤဖိုင်ကို ဖျက်ရန် သေချာပါသလား?</div>
+            <div style="font-weight:bold; color:var(--danger); font-size: 14px;">ဤဖိုင်ကို ဖျက်ရန် သေချာပါသလား?</div>
             <div class="del-btns">
                 <button class="btn-confirm" id="confirm-del-btn">ဖျက်မည်</button>
-                <button class="btn-cancel" onclick="cancelDelete()">မဖျက်တော့ပါ (Cancel)</button>
+                <button class="btn-cancel" onclick="cancelDelete()">Cancel</button>
             </div>
         </div>
 
-        <div id="history-list" style="display:none; margin-top:10px; max-height:250px; overflow-y:auto; border: 1px solid #eee; border-radius: 10px;">
+        <div id="history-list" style="display:none; margin-top:10px; max-height:250px; overflow-y:auto; border: 1px solid #e2e8f0; border-radius: 10px;">
             <table style="width:100%; border-collapse: collapse;"><tbody id="history-table-body"></tbody></table>
         </div>
     </div>
@@ -169,35 +182,30 @@
 <div id="report-view">
     <div class="slip-container">
         <div class="slip-header">
-            <h2 style="margin:0; color:var(--dark); letter-spacing:1px;">CHABAD HOUSE</h2>
-            <div style="font-size:12px; color:#64748b; font-weight:bold; margin-top:5px;">SALARY SLIP (PAYROLL)</div>
+            <h2 style="margin:0; color:var(--dark); letter-spacing:1px; font-size:22px;">CHABAD HOUSE</h2>
+            <div style="font-size:12px; color:#64748b; font-weight:700; margin-top:5px; text-transform: uppercase;">SALARY SLIP (PAYROLL)</div>
         </div>
-        
         <div class="slip-row"><span>Employee Name:</span> <b id="r-name">-</b></div>
         <div class="slip-row"><span>Salary Month:</span> <b id="r-month">-</b></div>
         <div class="slip-row"><span>Base Salary:</span> <b id="r-base">-</b></div>
-
         <table class="slip-table">
-            <thead><tr><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
+            <thead><tr><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total Hrs</th></tr></thead>
             <tbody id="report-body"></tbody>
         </table>
-
         <div style="border-top: 2px dashed #cbd5e1; margin: 15px 0; padding-top: 10px;">
             <div class="slip-row"><span>Total Work Hours:</span> <b id="rv-total-hrs">0:00</b></div>
             <div class="slip-row"><span>Standard Hours:</span> <b>234:00</b></div>
             <div class="slip-row"><span>Calculated Salary:</span> <b id="rv-pro-rata">0</b></div>
-            <div class="slip-row" style="color:var(--danger);"><span>Overtime (OT) Hours:</span> <b id="rv-ot-hrs">0:00</b></div>
-            <div class="slip-row" style="color:var(--danger);"><span>OT Rate (57 Ks/hr):</span> <b id="rv-ot-cash">0</b></div>
+            <div class="slip-row" style="color:var(--danger);"><span>OT Hours:</span> <b id="rv-ot-hrs">0:00</b></div>
+            <div class="slip-row" style="color:var(--danger);"><span>OT Cash (57 Ks/hr):</span> <b id="rv-ot-cash">0</b></div>
         </div>
-
         <div class="total-section">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:bold; font-size:14px;">TOTAL NET PAYABLE</span>
-                <span style="font-size:24px; font-weight:900;" id="rv-grand-total">0</span>
+                <span style="font-weight:700; font-size:14px;">TOTAL NET PAYABLE Ks</span>
+                <span style="font-size:26px; font-weight:900;" id="rv-grand-total">0</span>
             </div>
         </div>
     </div>
-
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px auto; max-width:500px;">
         <button style="padding:15px; border-radius:12px; background:#64748b; color:white; border:none; font-weight:bold;" onclick="closeReport()">BACK</button>
         <button style="padding:15px; border-radius:12px; background:var(--primary); color:white; border:none; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
@@ -226,9 +234,11 @@
         active = el; active.classList.add('active');
         document.getElementById('keypad').classList.add('open');
         document.body.classList.add('keypad-open');
-        const headerHeight = 220;
-        const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({ top: elementPosition - headerHeight - 10, behavior: 'smooth' });
+        setTimeout(() => {
+            const headerHeight = 220;
+            const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: elementPosition - headerHeight - 10, behavior: 'smooth' });
+        }, 100);
     }
 
     function closeK() { if(active) active.classList.remove('active'); document.getElementById('keypad').classList.remove('open'); document.body.classList.remove('keypad-open'); active = null; }
@@ -241,10 +251,7 @@
         else if(s.length < 4) s += v;
         active.innerText = s.length >= 3 ? s.substring(0,2)+":"+s.substring(2,4) : s;
         calc();
-        if(s.length === 4) { 
-            let n = parseInt(active.dataset.id) + 1; 
-            if(n < boxes.length) boxes[n].click(); 
-        }
+        if(s.length === 4) { let n = parseInt(active.dataset.id) + 1; if(n < boxes.length) boxes[n].click(); }
     }
 
     function calc() {
@@ -295,9 +302,9 @@
             if(filtered.length > 0) {
                 listDiv.style.display = 'block';
                 tableBody.innerHTML = filtered.map(r => `
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 10px;"><b>${r.name}</b><br><small>${r.month}</small></td>
-                        <td style="text-align:right; padding: 10px;">
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 12px; font-size:14px;"><b>${r.name}</b><br><small style="color:var(--primary); font-weight:700;">${r.month}</small></td>
+                        <td style="text-align:right; padding: 12px;">
                             <button class="btn-action btn-view" onclick="previewRecord('${r.id}')">VIEW</button>
                             <button class="btn-action btn-del" onclick="askDelete('${r.id}')">DEL</button>
                         </td>
@@ -306,17 +313,20 @@
         } else { listDiv.style.display = 'none'; }
     }
 
-    function askDelete(id) {
-        pendingDelId = id;
+    function askDelete(id) { 
+        pendingDelId = id; 
         document.getElementById('del-ui').style.display = 'block';
-        document.getElementById('confirm-del-btn').onclick = function() {
-            let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
-            db = db.filter(r => String(r.id) !== String(pendingDelId));
-            localStorage.setItem('chabad_records', JSON.stringify(db));
-            cancelDelete(); handleSearch();
-        };
+        // Scroll issue fixed: scrollIntoView functions removed.
     }
+    
     function cancelDelete() { document.getElementById('del-ui').style.display = 'none'; pendingDelId = null; }
+    
+    document.getElementById('confirm-del-btn').onclick = function() {
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        db = db.filter(r => String(r.id) !== String(pendingDelId));
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        cancelDelete(); handleSearch();
+    };
 
     function previewRecord(id) {
         const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
@@ -335,30 +345,28 @@
         const d = calc(); closeK();
         document.getElementById('edit-view').style.display = 'none';
         document.getElementById('report-view').style.display = 'block';
-        
         document.getElementById('r-name').innerText = document.getElementById('user-name').value || "-";
         document.getElementById('r-month').innerText = document.getElementById('work-month').value || "-";
         document.getElementById('r-base').innerText = parseInt(document.getElementById('base-salary').value).toLocaleString() + " Ks";
-        
         document.getElementById('rv-total-hrs').innerText = document.getElementById('gt').innerText;
         document.getElementById('rv-pro-rata').innerText = d.calculatedBase.toLocaleString() + " Ks";
         document.getElementById('rv-ot-hrs').innerText = document.getElementById('ot').innerText;
         document.getElementById('rv-ot-cash').innerText = "+ " + d.otCash.toLocaleString() + " Ks";
         document.getElementById('rv-grand-total').innerText = d.grand.toLocaleString();
-        
         const body = document.getElementById('report-body'); body.innerHTML = "";
         for(let d=1; d<=31; d++) {
             let timeStr = document.getElementById(`dh-${d}`).innerText;
             if(timeStr !== "0:00") {
                 let b = boxes.slice((d-1)*4, d*4).map(x => x.innerText || "-");
-                body.innerHTML += `<tr><td>${d}</td><td>${b[0]}-${b[1]}</td><td>${b[2]}-${b[3]}</td><td><b>${timeStr}</b></td></tr>`;
+                body.innerHTML += `<tr><td>Day ${d}</td><td>${b[0]}-${b[1]}</td><td>${b[2]}-${b[3]}</td><td><b>${timeStr}</b></td></tr>`;
             }
         }
+        window.scrollTo(0,0);
     }
 
     function toggleGuide(e) { e.stopPropagation(); const modal = document.getElementById('guide-modal'); modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex'; }
     function nextRow() { if(!active) return; let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4; if(next < boxes.length) boxes[next].click(); }
-    function confirmClear() { if(confirm("အချက်အလက်အားလုံး ဖျက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
+    function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
     function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
