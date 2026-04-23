@@ -6,79 +6,99 @@
     <title>CHABAD HOUSE | Payroll Pro</title>
     <style>
         :root { 
-            --bg: #f3f4f6; --primary: #3b82f6; --danger: #ef4444; 
-            --success: #10b981; --dark: #1f2937; --border: #e5e7eb;
+            --bg: #f8fafc; --primary: #3b82f6; --danger: #ef4444; 
+            --success: #10b981; --dark: #0f172a; --border: #cbd5e1;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            font-family: sans-serif; background: var(--bg); margin: 0; 
-            padding: 230px 12px 100px 12px; color: var(--dark);
-            transition: padding-bottom 0.3s ease;
-        }
-        /* Calculator ပွင့်ချိန်မှာ အောက်ခြေကို နေရာအကျယ်ကြီး ချဲ့ပေးထားခြင်း */
-        body.keypad-open { padding-bottom: 450px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: sans-serif; }
+        body { background: var(--bg); margin: 0; padding: 230px 10px 100px 10px; color: var(--dark); transition: 0.3s; }
+        body.keypad-open { padding-bottom: 400px; }
 
         header { 
             position: fixed; top: 0; left: 0; right: 0; 
-            background: #fff; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            background: #fff; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
             height: 220px; border-bottom: 3px solid var(--dark);
         }
         .header-top { 
             background: var(--dark); color: #fff; 
             display: flex; justify-content: space-between;
-            align-items: center; padding: 8px 15px; 
+            align-items: center; padding: 8px 12px; 
         }
         
-        .marquee-container { flex: 1; overflow: hidden; white-space: nowrap; margin: 0 10px; }
+        /* --- NEW ANIMATED TITLE DESIGN --- */
+        .marquee-container { flex: 1; text-align: center; margin: 0 10px; overflow: hidden; }
         .header-title { 
-            display: inline-block; font-weight: 900; letter-spacing: 2px; font-size: 18px;
-            color: #fff; text-shadow: 0 0 8px #3b82f6;
-            animation: marquee 8s linear infinite;
+            display: inline-block; font-weight: 900; font-size: 19px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #3b82f6, #facc15, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            animation: gradientMove 4s linear infinite, glowPulse 2s ease-in-out infinite;
         }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes gradientMove {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        @keyframes glowPulse {
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5)); }
+            50% { filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8)); }
+        }
+        /* --------------------------------- */
 
-        .btn-top { width: 70px; height: 35px; border: none; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; }
-        .btn-help { background: var(--primary); color: white; }
-        .btn-new { background: var(--danger); color: white; }
+        .btn-top { width: 75px; height: 35px; border: none; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; color: #fff; }
+        .btn-help { background: var(--primary); }
+        .btn-new { background: var(--danger); }
 
         .info-bar { display: flex; gap: 8px; padding: 12px 12px 0 12px; }
         .info-bar input { border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; flex: 1; outline: none; }
         
         .input-bar { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
-        #base-salary { width: 110px; padding: 10px; border: 2px solid var(--dark); border-radius: 10px; font-weight: bold; font-size: 22px; text-align: center; color: var(--primary); }
-        .pay-box { text-align: right; background: #ecfdf5; padding: 8px 15px; border-radius: 12px; border: 1.5px solid var(--success); min-width: 140px; }
-        .pay-label { font-size: 10px; color: var(--success); font-weight: bold; }
-        .summary { display: grid; grid-template-columns: 1fr 1fr; background: #f8fafc; padding: 10px 15px; font-size: 13px; font-weight: 700; border-top: 1px solid var(--border); }
+        #base-salary { width: 100px; padding: 8px; border: 2px solid var(--dark); border-radius: 10px; font-weight: bold; font-size: 20px; text-align: center; color: var(--primary); }
+        .pay-box { text-align: right; background: #ecfdf5; padding: 6px 12px; border-radius: 12px; border: 1.5px solid var(--success); }
+        .pay-label { font-size: 9px; color: var(--success); font-weight: bold; }
+        .summary { display: grid; grid-template-columns: 1fr 1fr; background: #f1f5f9; padding: 10px 15px; font-size: 13px; font-weight: 700; border-top: 1px solid var(--border); }
 
-        .row { display: flex; align-items: center; padding: 12px; background: #fff; margin-bottom: 8px; border-radius: 15px; transition: transform 0.3s; }
+        .row { display: flex; align-items: center; padding: 12px; background: #fff; margin-bottom: 8px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .day { width: 35px; font-weight: 800; color: #64748b; font-size: 16px; }
         .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; }
-        .box { background: #f9fafb; height: 45px; line-height: 45px; text-align: center; border-radius: 10px; border: 1.5px solid #d1d5db; font-weight: bold; font-size: 14px; }
+        .box { background: #f8fafc; height: 45px; line-height: 45px; text-align: center; border-radius: 10px; border: 1.5px solid #cbd5e1; font-weight: bold; font-size: 14px; }
         .box.active { border-color: var(--primary); background: #eff6ff; border-width: 2px; }
 
-        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 1000; transform: translateY(100%); transition: 0.3s; border-top: 3px solid var(--dark); border-radius: 25px 25px 0 0; }
+        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 2000; transform: translateY(100%); transition: 0.3s; border-top: 4px solid var(--dark); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.2); }
         .keypad.open { transform: translateY(0); }
-        .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; }
-        .key-grid button { padding: 18px; font-size: 26px; font-weight: bold; border-radius: 14px; border: 1px solid #e5e7eb; background: #fff; }
-        .key-grid button:active { background: #f3f4f6; }
-        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 15px 15px 15px; }
-        .ctrl-btns button { padding: 14px 2px; border-radius: 10px; border: none; font-weight: bold; color: white; font-size: 11px; }
+        .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
+        .key-grid button { padding: 15px; font-size: 24px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; }
+        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 15px 15px 15px; }
+        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; }
 
-        #guide-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; padding: 20px; align-items: center; justify-content: center; }
-        .guide-content { background: #fff; padding: 25px; border-radius: 20px; width: 100%; max-height: 80vh; overflow-y: auto; }
-        .guide-item { margin-bottom: 15px; font-size: 14px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .del-confirm { display: none; background: #fff5f5; border: 2px solid var(--danger); padding: 15px; border-radius: 12px; margin-top: 10px; text-align: center; }
+        .del-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .btn-confirm { background: var(--danger); color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; }
+        .btn-cancel { background: #64748b; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; }
 
-        .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 13px; color: var(--dark); font-weight: 900; z-index: 50; background: #fff; padding: 6px 12px; border-radius: 50px; border: 2px solid var(--primary); }
-        #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 1500; overflow-y: auto; padding: 15px; }
+        #guide-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; padding: 20px; align-items: center; justify-content: center; }
+        .guide-content { background: #fff; padding: 25px; border-radius: 20px; width: 100%; max-height: 85vh; overflow-y: auto; }
+        .guide-item { margin-bottom: 18px; font-size: 14px; border-left: 5px solid var(--primary); padding-left: 12px; line-height: 1.6; }
+
+        .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 14px; color: var(--dark); font-weight: 900; z-index: 50; background: #fff; padding: 6px 15px; border-radius: 50px; border: 2px solid var(--primary); }
+        #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 4000; overflow-y: auto; padding: 15px; }
+        
+        .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; }
+        .btn-view { background: var(--primary); }
+        .btn-del { background: var(--danger); }
     </style>
 </head>
 <body onclick="handleBackdrop(event)">
 
 <div id="edit-view">
-    <header id="main-header">
+    <header>
         <div class="header-top">
             <button class="btn-top btn-help" onclick="toggleGuide(event)">လမ်းညွှန်</button>
-            <div class="marquee-container"><div class="header-title">CHABAD HOUSE PAYROLL SYSTEM</div></div>
+            <div class="marquee-container">
+                <div class="header-title">CHABAD HOUSE PAYROLL</div>
+            </div>
             <button class="btn-top btn-new" onclick="confirmClear()">NEW</button>
         </div>
         <div class="info-bar">
@@ -88,29 +108,41 @@
         <div class="input-bar">
             <input type="number" id="base-salary" value="12000" oninput="calc()">
             <div class="pay-box">
-                <div class="pay-label">Total Payable</div>
-                <div id="final-pay" style="font-size:26px; font-weight:900; color:var(--success);">0</div>
+                <div class="pay-label">Net Payable</div>
+                <div id="final-pay" style="font-size:24px; font-weight:900; color:var(--success);">0</div>
             </div>
         </div>
         <div class="summary">
-            <div>TOTAL: <span id="gt" style="color:var(--primary)">0:00</span></div>
-            <div style="text-align: right;">OT: <span id="ot" style="color:var(--danger)">0:00</span></div>
+            <div>TOTAL HRS: <span id="gt" style="color:var(--primary)">0:00</span></div>
+            <div style="text-align: right;">OT HRS: <span id="ot" style="color:var(--danger)">0:00</span></div>
         </div>
     </header>
 
     <div id="guide-modal" onclick="toggleGuide(event)">
         <div class="guide-content" onclick="event.stopPropagation()">
-            <h3 style="text-align:center;">Payroll လမ်းညွှန်</h3>
-            <div class="guide-item"><b>၁။ လစာပြင်ဆင်ခြင်း:</b> ၁၂၀၀၀ နေရာမှာ စိတ်ကြိုက်ပြင်ပါ။</div>
-            <div class="guide-item"><b>၂။ အချိန်ရိုက်နှိပ်ပုံ:</b> အကွက်ကိုနှိပ်ပြီး ဂဏန်း ၄ လုံးရိုက်ပါ။ (ဥပမာ- ၀၉၀၀)။</div>
-            <div class="guide-item"><b>၃။ စနစ်:</b> ၂၃၄ နာရီ စံနှုန်းထားပါတယ်။ ကျော်ရင် ၁ နာရီ ၅၇ ကျပ် OT ရပါမယ်။</div>
-            <button onclick="toggleGuide(event)" style="width:100%; padding:15px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold;">နားလည်ပါပြီ</button>
+            <h2 style="text-align:center; color:var(--dark); margin-top:0;">အသုံးပြုပုံလမ်းညွှန်</h2>
+            <p style="font-size:13px; color:var(--primary); font-weight:bold; text-align:center;">"Chabad ဝန်ထမ်းများအတွက် အထူးရေးသားပေးထားပါသည်"</p>
+            <div class="guide-item"><b>၁။ လစာပြင်ခြင်း:</b> လစာ ၁၂၀၀၀ နေရာတွင် နှိပ်၍ မိမိစိတ်ကြိုက် ပြောင်းလဲနိုင်ပါသည်။</div>
+            <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ် (ဥပမာ- ညနေ ၅ နာရီဆိုလျှင် ၁၇၀၀) ရိုက်ရန်။</div>
+            <div class="guide-item"><b>၃။ စံနှုန်း:</b> တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> သတ်မှတ်ထားပါသည်။</div>
+            <div class="guide-item"><b>၄။ အချိုးကျလစာ:</b> ၂၃၄ နာရီမပြည့်ပါက အလုပ်လုပ်ခဲ့သော နာရီအလိုက်သာ အချိုးကျ (Pro-rata) တွက်ချက်ပေးပါမည်။</div>
+            <div class="guide-item"><b>၅။ OT တွက်ချက်ခြင်း:</b> ၂၃၄ နာရီထက် ကျော်လွန်ပါက ပိုလုပ်သော နာရီများအတွက် <b>၁ နာရီလျှင် ၅၇ ကျပ်</b> ပေါင်းပေးပါသည်။</div>
+            <button onclick="toggleGuide(event)" style="width:100%; padding:15px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:16px;">နားလည်ပါပြီ</button>
         </div>
     </div>
 
     <div style="background: #fff; margin: 15px 0; padding: 15px; border-radius: 15px;">
-        <input type="text" id="search-box" placeholder="🔍 အမည်ဖြင့် ရှာရန်..." oninput="handleSearch()" style="width:100%; padding:12px; border-radius:10px; border:2px solid #e2e8f0; outline:none;">
-        <div id="history-list" style="display:none; margin-top:10px; max-height:200px; overflow-y:auto;">
+        <input type="text" id="search-box" placeholder="🔍 အမည်ဖြင့် ရှာဖွေရန်..." oninput="handleSearch()" style="width:100%; padding:12px; border-radius:10px; border:2px solid #e2e8f0; outline:none; font-size:15px;">
+        
+        <div id="del-ui" class="del-confirm">
+            <div style="font-weight:bold; color:var(--danger);">ဤဖိုင်ကို ဖျက်ရန် သေချာပါသလား?</div>
+            <div class="del-btns">
+                <button class="btn-confirm" id="confirm-del-btn">ဖျက်မည်</button>
+                <button class="btn-cancel" onclick="cancelDelete()">မဖျက်တော့ပါ (Cancel)</button>
+            </div>
+        </div>
+
+        <div id="history-list" style="display:none; margin-top:10px; max-height:250px; overflow-y:auto; border: 1px solid #eee; border-radius: 10px;">
             <table style="width:100%; border-collapse: collapse;"><tbody id="history-table-body"></tbody></table>
         </div>
     </div>
@@ -136,16 +168,39 @@
 </div>
 
 <div id="report-view">
-    <div style="border: 3px solid var(--dark); padding: 20px; background: #fff; border-radius: 20px;">
+    <div style="border: 3px solid var(--dark); padding: 20px; background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         <h2 style="text-align:center; margin:0;">CHABAD HOUSE</h2>
-        <table style="width:100%; border-collapse:collapse; margin-top:15px; font-size: 12px; text-align: center;">
+        <div style="display:flex; justify-content: space-between; margin-top:15px; font-size:13px; border-top:1px solid #000; padding:10px 0;">
+            <span>NAME: <b id="r-name">-</b></span>
+            <span>MONTH: <b id="r-month">-</b></span>
+        </div>
+        <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size: 11px; text-align: center;">
             <thead><tr style="background:#f1f5f9;"><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
             <tbody id="report-body"></tbody>
         </table>
-        <div style="margin-top:20px; background:#f0fdf4; border:2px solid var(--success); padding:15px; border-radius:12px;">
-            <div style="display:flex; justify-content:space-between;"><span>Basic Salary:</span><b id="rv-base-salary">0</b></div>
-            <div style="display:flex; justify-content:space-between; font-size:22px; font-weight:900;"><span>TOTAL:</span><b id="rv-grand-total">0</b></div>
-        </div>
+        
+        <table style="width:100%; border-collapse:collapse; margin-top:20px; font-size: 13px; border: 1px solid #eee;">
+            <tr style="background:#f8fafc;">
+                <td style="padding:10px;">Total Work Hours</td>
+                <td style="text-align:right; padding:10px;"><b id="rv-total-hrs">0:00</b></td>
+            </tr>
+            <tr>
+                <td style="padding:10px;">Standard (Salary)</td>
+                <td style="text-align:right; padding:10px;">234:00</td>
+            </tr>
+            <tr style="background:#fff1f2;">
+                <td style="padding:10px; color:var(--danger);">Extra OT Hours</td>
+                <td style="text-align:right; padding:10px;"><b id="rv-ot-hrs">0:00</b></td>
+            </tr>
+            <tr>
+                <td style="padding:10px;">OT Rate (57 Ks/hr)</td>
+                <td style="text-align:right; padding:10px;" id="rv-ot-calc">0</td>
+            </tr>
+            <tr style="background:#f0fdf4; border-top:2px solid var(--success);">
+                <td style="padding:12px; font-weight:bold;">Final Amount</td>
+                <td style="text-align:right; padding:12px; font-size:22px; font-weight:900; color:var(--success);" id="rv-grand-total">0</td>
+            </tr>
+        </table>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:30px 0;">
         <button style="padding:18px; border-radius:15px; background:#64748b; color:white; border:none;" onclick="closeReport()">BACK</button>
@@ -154,38 +209,31 @@
 </div>
 
 <script>
-    let active = null; let boxes = [];
+    let active = null; let boxes = []; let pendingDelId = null;
     const list = document.getElementById('list');
 
     for(let d=1; d<=31; d++) {
         const row = document.createElement('div');
         row.className = 'row';
-        row.id = `row-${d}`;
         row.innerHTML = `<div class="day">${d}</div><div class="boxes">
-            <div class="box" data-id="${(d-1)*4+0}" onclick="openK(event, this, ${d})"></div>
-            <div class="box" data-id="${(d-1)*4+1}" onclick="openK(event, this, ${d})"></div>
-            <div class="box" data-id="${(d-1)*4+2}" onclick="openK(event, this, ${d})"></div>
-            <div class="box" data-id="${(d-1)*4+3}" onclick="openK(event, this, ${d})"></div>
+            <div class="box" data-id="${(d-1)*4+0}" onclick="openK(event, this)"></div>
+            <div class="box" data-id="${(d-1)*4+1}" onclick="openK(event, this)"></div>
+            <div class="box" data-id="${(d-1)*4+2}" onclick="openK(event, this)"></div>
+            <div class="box" data-id="${(d-1)*4+3}" onclick="openK(event, this)"></div>
         </div><div style="width:55px; text-align:right; font-weight:bold; color:var(--primary); font-size:13px;" id="dh-${d}">0:00</div>`;
         list.appendChild(row);
     }
     boxes = Array.from(document.querySelectorAll('.box'));
 
-    function openK(e, el, day) {
+    function openK(e, el) {
         e.stopPropagation(); if(active) active.classList.remove('active');
         active = el; active.classList.add('active');
         document.getElementById('keypad').classList.add('open');
         document.body.classList.add('keypad-open');
         
-        // နည်းလမ်းသစ် - အကွက်ကို Header အောက်ကို ရောက်အောင် Scroll ဆွဲတင်ခြင်း
-        setTimeout(() => {
-            const headerHeight = 220;
-            const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo({
-                top: elementPosition - headerHeight - 10,
-                behavior: 'smooth'
-            });
-        }, 100);
+        const headerHeight = 220;
+        const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({ top: elementPosition - headerHeight - 10, behavior: 'smooth' });
     }
 
     function closeK() { if(active) active.classList.remove('active'); document.getElementById('keypad').classList.remove('open'); document.body.classList.remove('keypad-open'); active = null; }
@@ -222,23 +270,84 @@
         }
         let calculatedBase = totalMin >= targetMin ? inputSalary : Math.round((totalMin / targetMin) * inputSalary);
         let otMin = totalMin > targetMin ? totalMin - targetMin : 0;
-        let grand = calculatedBase + Math.round((otMin / 60) * 57);
+        let otCash = Math.round((otMin / 60) * 57);
+        let grand = calculatedBase + otCash;
         document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
         document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = grand.toLocaleString();
-        return { base: calculatedBase, grand };
+        return { otCash, grand };
     }
 
-    function toggleGuide(e) { e.stopPropagation(); const modal = document.getElementById('guide-modal'); modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex'; }
-    function nextRow() { if(!active) return; let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4; if(next < boxes.length) boxes[next].click(); }
-    function saveToDB() { /* အရင် Function အတိုင်း */ alert("သိမ်းဆည်းပြီးပါပြီ"); }
-    function handleSearch() { /* အရင် Function အတိုင်း */ }
+    function saveToDB() {
+        const name = document.getElementById('user-name').value.trim();
+        const month = document.getElementById('work-month').value;
+        if(!name || !month) return alert("အမည်နှင့် လ ကို ထည့်ပေးပါ။");
+        const data = { id: Date.now(), name, month, salary: document.getElementById('base-salary').value, hours: boxes.map(b => b.innerText) };
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        db = db.filter(r => !(r.name === name && r.month === month));
+        db.push(data);
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        alert("ဒေတာ သိမ်းဆည်းပြီးပါပြီ။");
+    }
+
+    function handleSearch() {
+        const query = document.getElementById('search-box').value.trim().toLowerCase();
+        const listDiv = document.getElementById('history-list');
+        const tableBody = document.getElementById('history-table-body');
+        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        if (query.length > 0) {
+            const filtered = db.filter(r => r.name.toLowerCase().includes(query));
+            if(filtered.length > 0) {
+                listDiv.style.display = 'block';
+                tableBody.innerHTML = filtered.map(r => `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;"><b>${r.name}</b><br><small>${r.month}</small></td>
+                        <td style="text-align:right; padding: 10px;">
+                            <button class="btn-action btn-view" onclick="previewRecord('${r.id}')">VIEW</button>
+                            <button class="btn-action btn-del" onclick="askDelete('${r.id}')">DEL</button>
+                        </td>
+                    </tr>`).join('');
+            } else { listDiv.style.display = 'none'; }
+        } else { listDiv.style.display = 'none'; }
+    }
+
+    function askDelete(id) {
+        pendingDelId = id;
+        document.getElementById('del-ui').style.display = 'block';
+        document.getElementById('confirm-del-btn').onclick = function() {
+            let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+            db = db.filter(r => String(r.id) !== String(pendingDelId));
+            localStorage.setItem('chabad_records', JSON.stringify(db));
+            cancelDelete();
+            handleSearch();
+        };
+    }
+    function cancelDelete() { document.getElementById('del-ui').style.display = 'none'; pendingDelId = null; }
+
+    function previewRecord(id) {
+        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        const r = db.find(item => String(item.id) === String(id));
+        if(!r) return;
+        document.getElementById('user-name').value = r.name;
+        document.getElementById('work-month').value = r.month;
+        document.getElementById('base-salary').value = r.salary;
+        r.hours.forEach((h, i) => { if(boxes[i]) boxes[i].innerText = h; });
+        finishDraft();
+        document.getElementById('history-list').style.display = 'none';
+        document.getElementById('search-box').value = "";
+    }
+
     function finishDraft() {
         const d = calc(); closeK();
         document.getElementById('edit-view').style.display = 'none';
         document.getElementById('report-view').style.display = 'block';
-        document.getElementById('rv-base-salary').innerText = d.base.toLocaleString();
+        document.getElementById('r-name').innerText = document.getElementById('user-name').value || "-";
+        document.getElementById('r-month').innerText = document.getElementById('work-month').value || "-";
+        document.getElementById('rv-total-hrs').innerText = document.getElementById('gt').innerText;
+        document.getElementById('rv-ot-hrs').innerText = document.getElementById('ot').innerText;
+        document.getElementById('rv-ot-calc').innerText = "+ " + d.otCash.toLocaleString() + " Ks";
         document.getElementById('rv-grand-total').innerText = d.grand.toLocaleString();
+        
         const body = document.getElementById('report-body'); body.innerHTML = "";
         for(let d=1; d<=31; d++) {
             let timeStr = document.getElementById(`dh-${d}`).innerText;
@@ -248,9 +357,12 @@
             }
         }
     }
-    function confirmClear() { if(confirm("ဒေတာဖျက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
+
+    function toggleGuide(e) { e.stopPropagation(); const modal = document.getElementById('guide-modal'); modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex'; }
+    function nextRow() { if(!active) return; let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4; if(next < boxes.length) boxes[next].click(); }
+    function confirmClear() { if(confirm("အချက်အလက်အားလုံး ဖျက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
-    function switchToEdit() { closeReport(); }
+    function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
 </body>
 </html>
