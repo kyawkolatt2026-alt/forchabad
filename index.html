@@ -1,66 +1,79 @@
-
 <!DOCTYPE html>
 <html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CHABAD HOUSE | Pro Admin</title>
+    <title>CHABAD HOUSE | Admin</title>
     <style>
-        :root { --bg: #f1f5f9; --primary: #2563eb; --text: #0f172a; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 180px 10px 450px 10px; overflow-x: hidden; }
+        :root { --bg: #f1f5f9; --primary: #2563eb; --danger: #ef4444; --success: #16a34a; --grey: #64748b; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 220px 10px 50px 10px; }
+        body.keypad-open { padding-bottom: 420px; }
 
-        header { position: fixed; top: 0; left: 0; right: 0; background: #fff; z-index: 100; border-bottom: 2px solid #000; height: 170px; }
-        .brand { background: #000; color: #fff; text-align: center; padding: 5px; font-weight: bold; font-size: 14px; }
-        
-        /* New Info Bar */
+        header { position: fixed; top: 0; left: 0; right: 0; background: #fff; z-index: 100; border-bottom: 2px solid #000; height: 210px; }
+        .header-top { background: #000; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 5px 15px; }
         .info-bar { display: flex; gap: 5px; padding: 8px 10px 0 10px; }
-        .info-bar input { border: 1px solid #cbd5e1; border-radius: 5px; padding: 5px; font-size: 12px; }
-        #user-name { flex: 2; }
-        #work-month { flex: 1; }
-
-        .input-bar { padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .info-bar input { border: 1px solid #cbd5e1; border-radius: 5px; padding: 8px; font-size: 14px; outline: none; flex: 1; }
+        #user-name { border: 2px solid var(--primary); }
+        .input-bar { padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; }
         #base-salary { width: 90px; padding: 8px; border: 2px solid #000; border-radius: 8px; font-weight: bold; font-size: 18px; }
-        .pay-box { text-align: right; background: #dcfce7; padding: 5px 12px; border-radius: 10px; border: 2px solid #16a34a; }
+        .pay-box { text-align: right; background: #dcfce7; padding: 5px 12px; border-radius: 10px; border: 2px solid var(--success); }
         .summary { display: grid; grid-template-columns: 1fr 1fr; background: #e2e8f0; padding: 6px 15px; font-size: 11px; font-weight: bold; }
 
-        #list { padding-bottom: 100px; }
+        /* History List */
+        .history-panel { background: #fff; margin: 10px 0; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1; }
+        #search-box { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--grey); box-sizing: border-box; font-size: 14px; }
+        #history-list { display: none; margin-top: 10px; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .data-table td { padding: 15px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .btn-v { background: var(--primary); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; }
+        .btn-d { background: var(--danger); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; margin-left: 5px; }
+
+        /* Custom Modal */
+        #confirm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-box { background: #fff; padding: 25px; border-radius: 15px; width: 100%; max-width: 300px; text-align: center; }
+        .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .m-btn { padding: 12px; border-radius: 8px; border: none; font-weight: bold; color: #fff; }
+
+        /* List Rows */
         .row { display: flex; align-items: center; padding: 10px; background: #fff; margin-bottom: 2px; border-radius: 8px; }
-        .day { width: 30px; font-weight: bold; color: #64748b; }
+        .day { width: 30px; font-weight: bold; color: var(--grey); }
         .boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; flex: 1; }
-        .box { background: #f8fafc; height: 40px; line-height: 40px; text-align: center; border-radius: 6px; border: 1.5px solid #cbd5e1; font-weight: bold; font-size: 13px; }
-        .box.active { border-color: var(--primary); background: #eff6ff; border-width: 3px; outline: none; }
+        .box { background: #f8fafc; height: 45px; line-height: 45px; text-align: center; border-radius: 6px; border: 1.5px solid #cbd5e1; font-weight: bold; font-size: 14px; }
+        .box.active { border-color: var(--primary); background: #eff6ff; border-width: 3px; }
 
-        #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 500; overflow-y: auto; padding: 15px; }
-        .report-card { border: 2px solid #000; padding: 15px; background: #fff; }
-        .report-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        .report-table th, .report-table td { border: 1px solid #000; padding: 6px; text-align: center; font-size: 12px; }
-        
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
-        .stat-item { padding: 10px; border: 1px solid #000; border-radius: 5px; background: #f8fafc; }
-
-        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 200; transform: translateY(100%); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-top: 3px solid #000; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); }
+        /* Keypad */
+        .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 200; transform: translateY(100%); transition: 0.3s; border-top: 3px solid #000; border-radius: 15px 15px 0 0; }
         .keypad.open { transform: translateY(0); }
         .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 15px; }
-        .key-grid button { padding: 15px; font-size: 22px; font-weight: bold; border-radius: 10px; border: 1.5px solid #000; background: #f1f5f9; touch-action: manipulation; }
+        .key-grid button { padding: 15px; font-size: 22px; font-weight: bold; border-radius: 10px; border: 1.5px solid #000; background: #f1f5f9; }
+        .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 0 15px 15px 15px; }
+        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 11px; }
+
+        /* Report Styles */
+        #report-view { display: none; position: fixed; inset: 0; background: #fff; z-index: 500; overflow-y: auto; padding: 15px; }
+        .report-card { border: 2px solid #000; padding: 15px; background: #fff; border-radius: 5px; }
+        .report-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .report-table th, .report-table td { border: 1px solid #000; padding: 6px; text-align: center; font-size: 11px; }
+        .report-summary { background: #f8fafc; border: 1px dashed #000; padding: 10px; margin-top: 10px; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
-<body>
+<body onclick="handleBackdrop(event)">
 
 <div id="edit-view">
     <header>
-        <div class="brand">CHABAD HOUSE | SYSTEM</div>
+        <div class="header-top">
+            <span style="font-weight:bold; font-size:14px;">CHABAD HOUSE</span>
+            <button onclick="confirmClear()" style="background:var(--danger); color:white; border:none; padding:4px 10px; border-radius:4px; font-size:11px;">NEW</button>
+        </div>
         <div class="info-bar">
-            <input type="text" id="user-name" placeholder="အမည်ထည့်ပါ">
+            <input type="text" id="user-name" placeholder="အမည်">
             <input type="month" id="work-month">
         </div>
         <div class="input-bar">
-            <div>
-                <small style="font-weight:bold;">Base Salary</small><br>
-                <input type="number" id="base-salary" value="12000" oninput="calc()">
-            </div>
+            <input type="number" id="base-salary" value="12000" oninput="calc()">
             <div class="pay-box">
                 <small>NET SALARY</small>
-                <div id="final-pay" style="font-size:20px; font-weight:900; color:#16a34a;">0</div>
+                <div id="final-pay" style="font-size:20px; font-weight:900; color:var(--success);">0</div>
             </div>
         </div>
         <div class="summary">
@@ -68,142 +81,210 @@
             <div style="text-align: right;">OT HRS: <span id="ot">0:00</span></div>
         </div>
     </header>
+
+    <div class="history-panel">
+        <input type="text" id="search-box" placeholder="🔍 နာမည်ဖြင့်ရှာဖွေရန်..." oninput="handleSearch()">
+        <div id="history-list">
+            <table class="data-table">
+                <tbody id="history-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
     <div id="list"></div>
 </div>
 
-<div id="report-view">
-    <div id="capture-area" class="report-card">
-        <div style="text-align:center; border-bottom:3px solid #000; padding-bottom:10px;">
-            <h2 style="margin:0;">CHABAD HOUSE</h2>
-            <p style="margin:5px 0; font-weight:bold;">WORK STATEMENT & SALARY SLIP</p>
+<div id="confirm-modal">
+    <div class="modal-box">
+        <h3 style="margin:0; color:var(--danger);">ဖျက်ရန် သေချာပါသလား?</h3>
+        <p style="font-size:14px; color:var(--grey); margin-top:10px;">ဒေတာများကို အပြီးအပိုင်ဖျက်ပါမည်။</p>
+        <div class="modal-btns">
+            <button class="m-btn" style="background:var(--grey);" onclick="closeConfirm()">မဖျက်တော့ပါ</button>
+            <button class="m-btn" style="background:var(--danger);" id="btn-confirm-del">ဖျက်မည်</button>
         </div>
-        
-        <div style="display: flex; justify-content: space-between; font-size: 13px; padding: 10px 0; font-weight: bold;">
-            <span>NAME: <span id="r-name">-</span></span>
-            <span>DATE: <span id="r-month">-</span></span>
-        </div>
-
-        <table class="report-table">
-            <thead><tr><th>Date</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr></thead>
-            <tbody id="report-body"></tbody>
-        </table>
-        
-        <div class="stat-grid">
-            <div class="stat-item">Normal Hours:<br><b>234:00 hr</b></div>
-            <div class="stat-item">OT Hours:<br><b id="r-ot-hr">0:00 hr</b></div>
-            <div class="stat-item">Base Pay:<br><b id="r-base-val">0</b></div>
-            <div class="stat-item">OT Pay (x57):<br><b id="r-ot-val">0</b></div>
-            <div class="stat-item" style="grid-column: span 2; background: #000; color: #fff; text-align: center;">
-                TOTAL PAYABLE: <br><b id="r-grand-val" style="font-size:18px;">0 MMK</b>
-            </div>
-        </div>
-        <div style="font-size: 9px; color: #64748b; margin-top: 10px; text-align: center;">
-            Generated on: <span id="report-date"></span>
-        </div>
-    </div>
-    <div style="margin-top:20px; display:flex; justify-content: center; padding-bottom: 50px;">
-        <button onclick="closeReport()" style="padding:12px 40px; border-radius:30px; background:#64748b; color:white; border:none; font-weight:bold;">BACK</button>
     </div>
 </div>
 
-<div id="keypad" class="keypad">
+<div id="report-view">
+    <div class="report-card">
+        <h2 style="text-align:center; margin:0; font-size: 18px;">CHABAD HOUSE</h2>
+        <p style="text-align:center; font-weight:bold; margin: 5px 0;">WORK STATEMENT</p>
+        
+        <div style="display:flex; justify-content: space-between; font-size:12px; border-top:1px solid #000; padding:8px 0;">
+            <span>NAME: <b id="r-name">-</b></span>
+            <span>MONTH: <b id="r-month">-</b></span>
+        </div>
+
+        <table class="report-table">
+            <thead>
+                <tr><th>Day</th><th>Shift 1</th><th>Shift 2</th><th>Total</th></tr>
+            </thead>
+            <tbody id="report-body"></tbody>
+        </table>
+
+        <div class="report-summary">
+            <div style="display:flex; justify-content:space-between;">
+                <span>Total Work Hours:</span>
+                <b id="r-total-hrs">0:00</b>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span>OT Hours (Over 234):</span>
+                <b id="r-ot-hrs">0:00</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; color: var(--success); border-top: 1px solid #ccc; margin-top:5px; padding-top:5px;">
+                <span>OT Pay (OT Hr x 57):</span>
+                <b id="r-ot-pay">0 MMK</b>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span>Base Salary:</span>
+                <b id="r-base-salary">0 MMK</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; border-top:2px solid #000; margin-top:8px; padding-top:8px;">
+                <span>NET PAYABLE:</span>
+                <span id="r-grand-total">0 MMK</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
+        <button style="padding:15px; border:none; border-radius:10px; background:var(--grey); color:white; font-weight:bold;" onclick="closeReport()">BACK</button>
+        <button style="padding:15px; border:none; border-radius:10px; background:var(--primary); color:white; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
+    </div>
+</div>
+
+<div id="keypad" class="keypad" onclick="event.stopPropagation()">
     <div class="key-grid">
         <button onclick="key(1)">1</button><button onclick="key(2)">2</button><button onclick="key(3)">3</button>
         <button onclick="key(4)">4</button><button onclick="key(5)">5</button><button onclick="key(6)">6</button>
         <button onclick="key(7)">7</button><button onclick="key(8)">8</button><button onclick="key(9)">9</button>
         <button onclick="key('AC')">AC</button><button onclick="key(0)">0</button><button onclick="key('DEL')">⌫</button>
     </div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; padding:0 15px 15px 15px;">
-        <button onclick="nextRow()" style="background:#64748b; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold;">NEXT DAY</button>
-        <button onclick="closeK()" style="background:#000; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold;">DONE</button>
-        <button onclick="finishDraft()" style="background:#16a34a; color:white; border:none; padding:12px; border-radius:10px; font-weight:bold;">FINISH</button>
+    <div class="ctrl-btns">
+        <button onclick="closeK()" style="background:var(--grey);">DONE</button>
+        <button onclick="nextRow()" style="background:black;">NEXT</button>
+        <button onclick="saveToDB()" style="background:var(--primary);">SAVE</button>
+        <button onclick="finishDraft()" style="background:var(--success);">PREVIEW</button>
     </div>
 </div>
 
 <script>
-    let active = null; let boxes = [];
+    let active = null; let boxes = []; let pendingDeleteId = null;
     const list = document.getElementById('list');
 
-    // Create 31 rows
     for(let d=1; d<=31; d++) {
         const row = document.createElement('div');
         row.className = 'row';
         row.innerHTML = `<div class="day">${d}</div><div class="boxes">
-            <div class="box" data-id="${(d-1)*4+0}" onclick="openK(this)"></div>
-            <div class="box" data-id="${(d-1)*4+1}" onclick="openK(this)"></div>
-            <div class="box" data-id="${(d-1)*4+2}" onclick="openK(this)"></div>
-            <div class="box" data-id="${(d-1)*4+3}" onclick="openK(this)"></div>
-        </div><div style="width:55px; text-align:right; font-weight:bold; color:var(--primary); font-size:12px;" id="dh-${d}">0:00</div>`;
+            <div class="box" data-id="${(d-1)*4+0}" onclick="openK(event, this)"></div>
+            <div class="box" data-id="${(d-1)*4+1}" onclick="openK(event, this)"></div>
+            <div class="box" data-id="${(d-1)*4+2}" onclick="openK(event, this)"></div>
+            <div class="box" data-id="${(d-1)*4+3}" onclick="openK(event, this)"></div>
+        </div><div style="width:55px; text-align:right; font-weight:bold; color:var(--primary); font-size:11px;" id="dh-${d}">0:00</div>`;
         list.appendChild(row);
     }
     boxes = Array.from(document.querySelectorAll('.box'));
 
-    // Set Current Month as default
-    const now = new Date();
-    document.getElementById('work-month').value = now.toISOString().substring(0, 7);
-
     window.onload = () => {
-        const saved = JSON.parse(localStorage.getItem('chabad_pro_v2') || '{}');
-        Object.keys(saved).forEach(id => { if(boxes[id]) boxes[id].innerText = saved[id]; });
-        document.getElementById('user-name').value = localStorage.getItem('chabad_user') || "";
+        document.getElementById('work-month').value = new Date().toISOString().substring(0, 7);
         calc();
     };
 
-    function openK(el) {
+    function handleSearch() {
+        const query = document.getElementById('search-box').value.trim().toLowerCase();
+        const historyPanel = document.getElementById('history-list');
+        const tableBody = document.getElementById('history-table-body');
+        if (query.length > 0) {
+            const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+            const filtered = db.filter(r => r.name.toLowerCase().includes(query));
+            if (filtered.length > 0) {
+                historyPanel.style.display = 'block';
+                tableBody.innerHTML = "";
+                filtered.forEach(r => {
+                    tableBody.innerHTML += `<tr>
+                        <td><b>${r.name}</b><br><small>${r.month}</small></td>
+                        <td style="text-align:right; white-space:nowrap;">
+                            <button class="btn-v" onclick="previewRecord(${r.id})">ကြည့်ရန်</button>
+                            <button class="btn-d" onclick="askDelete(${r.id})">ဖျက်ရန်</button>
+                        </td>
+                    </tr>`;
+                });
+            } else { tableBody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>ရှာမတွေ့ပါ</td></tr>"; }
+        } else { historyPanel.style.display = 'none'; }
+    }
+
+    function askDelete(id) { pendingDeleteId = id; document.getElementById('confirm-modal').style.display = 'flex'; }
+    function closeConfirm() { document.getElementById('confirm-modal').style.display = 'none'; pendingDeleteId = null; }
+    document.getElementById('btn-confirm-del').onclick = () => {
+        if(pendingDeleteId) {
+            let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+            db = db.filter(r => r.id !== pendingDeleteId);
+            localStorage.setItem('chabad_records', JSON.stringify(db));
+            handleSearch(); closeConfirm();
+        }
+    };
+
+    function previewRecord(id) {
+        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        const r = db.find(item => item.id === id);
+        if(!r) return;
+        document.getElementById('user-name').value = r.name;
+        document.getElementById('work-month').value = r.month;
+        document.getElementById('base-salary').value = r.salary;
+        r.hours.forEach((h, i) => { if(boxes[i]) boxes[i].innerText = h; });
+        calc();
+        finishDraft();
+        document.getElementById('history-list').style.display = 'none';
+        document.getElementById('search-box').value = "";
+    }
+
+    function saveToDB() {
+        const name = document.getElementById('user-name').value.trim();
+        const month = document.getElementById('work-month').value;
+        if(!name) return alert("အမည်ထည့်ပါ။");
+        const data = { id: Date.now(), name: name, month: month, salary: document.getElementById('base-salary').value, hours: boxes.map(b => b.innerText) };
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        const idx = db.findIndex(r => r.name === name && r.month === month);
+        if(idx > -1) db[idx] = data; else db.push(data);
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        alert("သိမ်းဆည်းပြီးပါပြီ။");
+    }
+
+    function openK(e, el) {
+        e.stopPropagation();
         if(active) active.classList.remove('active');
         active = el; active.classList.add('active');
         document.getElementById('keypad').classList.add('open');
-        setTimeout(() => {
-            const rect = el.getBoundingClientRect();
-            const keypadTop = window.innerHeight - 350; 
-            if (rect.bottom > keypadTop) {
-                window.scrollBy({ top: rect.bottom - keypadTop + 20, behavior: 'smooth' });
-            }
-        }, 300);
+        document.body.classList.add('keypad-open');
     }
-
     function closeK() {
         if(active) active.classList.remove('active');
         document.getElementById('keypad').classList.remove('open');
+        document.body.classList.remove('keypad-open');
         active = null;
     }
-
-    function nextRow() {
-        if(!active) return;
-        let next = (Math.floor(parseInt(active.dataset.id) / 4) + 1) * 4;
-        if(next < boxes.length) openK(boxes[next]); else closeK();
-    }
+    function handleBackdrop(e) { if (!document.getElementById('keypad').contains(e.target)) closeK(); }
 
     function key(v) {
         if(!active) return;
         let s = active.innerText.replace(":","");
-        if(v === 'AC') s = "";
-        else if(v === 'DEL') s = s.slice(0,-1);
+        if(v === 'AC') s = ""; else if(v === 'DEL') s = s.slice(0,-1);
         else if(s.length < 4) s += v;
         active.innerText = s.length >= 3 ? s.substring(0,2)+":"+s.substring(2,4) : s;
-        saveData();
         calc();
         if(s.length === 4) {
             let n = parseInt(active.dataset.id) + 1;
-            if(n < boxes.length) setTimeout(() => openK(boxes[n]), 100);
+            if(n < boxes.length) boxes[n].click();
         }
     }
-
-    function saveData() {
-        localStorage.setItem('chabad_pro_v2', JSON.stringify(Object.fromEntries(boxes.map((b,i)=>[i,b.innerText]))));
-        localStorage.setItem('chabad_user', document.getElementById('user-name').value);
-    }
-
-    function formatTime(totalMinutes) {
-        let h = Math.floor(totalMinutes / 60);
-        let m = Math.round(totalMinutes % 60);
-        return h + ":" + (m < 10 ? "0" + m : m);
+    function nextRow() {
+        if(!active) return;
+        let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4;
+        if(next < boxes.length) boxes[next].click();
     }
 
     function calc() {
         let totalMin = 0;
         let base = parseFloat(document.getElementById('base-salary').value) || 0;
-        
         for(let d=1; d<=31; d++) {
             let dMin = 0;
             let b = boxes.slice((d-1)*4, d*4);
@@ -216,34 +297,34 @@
                 }
             });
             totalMin += dMin;
-            document.getElementById(`dh-${d}`).innerText = formatTime(dMin);
+            document.getElementById(`dh-${d}`).innerText = Math.floor(dMin/60) + ":" + (dMin%60 < 10 ? "0"+(dMin%60) : dMin%60);
         }
+        let otMin = totalMin > (234*60) ? totalMin - (234*60) : 0;
+        let otPay = Math.round((otMin/60)*57);
+        let grand = base + otPay;
         
-        let otMin = totalMin > (234 * 60) ? totalMin - (234 * 60) : 0;
-        let otPay = Math.round((otMin / 60) * 57);
-        let grand = Math.round(base + otPay);
-
-        document.getElementById('gt').innerText = formatTime(totalMin);
-        document.getElementById('ot').innerText = formatTime(otMin);
+        document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
+        document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = grand.toLocaleString();
-        
-        document.getElementById('r-ot-hr').innerText = formatTime(otMin) + " hr";
-        document.getElementById('r-base-val').innerText = base.toLocaleString();
-        document.getElementById('r-ot-val').innerText = otPay.toLocaleString();
-        document.getElementById('r-grand-val').innerText = grand.toLocaleString() + " MMK";
+        return { totalMin, otMin, otPay, base, grand };
     }
 
     function finishDraft() {
-        saveData();
+        const data = calc();
         closeK();
         document.getElementById('edit-view').style.display = 'none';
         document.getElementById('report-view').style.display = 'block';
         
-        // Update Info in Report
         document.getElementById('r-name').innerText = document.getElementById('user-name').value || "-";
         document.getElementById('r-month').innerText = document.getElementById('work-month').value || "-";
-        document.getElementById('report-date').innerText = new Date().toLocaleString();
         
+        // Detailed summary in report
+        document.getElementById('r-total-hrs').innerText = document.getElementById('gt').innerText;
+        document.getElementById('r-ot-hrs').innerText = document.getElementById('ot').innerText;
+        document.getElementById('r-ot-pay').innerText = data.otPay.toLocaleString() + " MMK";
+        document.getElementById('r-base-salary').innerText = data.base.toLocaleString() + " MMK";
+        document.getElementById('r-grand-total').innerText = data.grand.toLocaleString() + " MMK";
+
         const body = document.getElementById('report-body');
         body.innerHTML = "";
         for(let d=1; d<=31; d++) {
@@ -255,10 +336,9 @@
         }
     }
 
-    function closeReport() { 
-        document.getElementById('report-view').style.display = 'none'; 
-        document.getElementById('edit-view').style.display = 'block'; 
-    }
+    function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
+    function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
+    function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
 </body>
 </html>
