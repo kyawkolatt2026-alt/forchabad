@@ -74,7 +74,11 @@
             outline: none;
             transition: 0.3s;
         }
-        #base-salary:focus { box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); background: #fff; transform: scale(1.05); }
+        #base-salary:focus {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            background: #fff;
+            transform: scale(1.05);
+        }
         
         .pay-box { text-align: right; background: #ecfdf5; padding: 6px 12px; border-radius: 10px; border: 1.5px solid var(--success); min-width: 140px; box-shadow: var(--shadow-sm); }
         .pay-label { font-size: 10px; color: var(--success); font-weight: 700; text-transform: uppercase; }
@@ -87,7 +91,6 @@
         .box { background: #f8fafc; height: 42px; line-height: 42px; text-align: center; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 14px; color: var(--dark); }
         .box.active { border-color: var(--primary); background: #eff6ff; border-width: 2px; }
 
-        /* Keypad Styles */
         .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 2000; transform: translateY(100%); transition: 0.3s; border-top: 4px solid var(--dark); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.2); }
         .keypad.open { transform: translateY(0); }
         .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
@@ -95,7 +98,17 @@
         .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 15px 15px 15px; }
         .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; text-transform: uppercase; }
 
-        /* Report Styles */
+        .del-confirm { display: none; background: #fff1f2; border: 2px solid var(--danger); padding: 15px; border-radius: 12px; margin-top: 10px; text-align: center; }
+        .del-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .btn-confirm { background: var(--danger); color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; font-size: 12px; }
+        .btn-cancel { background: #64748b; color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; font-size: 12px; }
+
+        #guide-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; padding: 20px; align-items: center; justify-content: center; }
+        .guide-content { background: #fff; padding: 25px; border-radius: 20px; width: 100%; max-height: 85vh; overflow-y: auto; }
+        .guide-item { margin-bottom: 18px; font-size: 14px; border-left: 5px solid var(--primary); padding-left: 12px; line-height: 1.6; }
+
+        .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 13px; color: var(--dark); font-weight: 800; z-index: 50; background: #fff; padding: 6px 15px; border-radius: 50px; border: 2px solid var(--dark); }
+        
         #report-view { display: none; position: fixed; inset: 0; background: #f1f5f9; z-index: 4000; overflow-y: auto; padding: 10px; }
         .slip-container { background: #fff; border-radius: 15px; padding: 20px; border-top: 8px solid var(--dark); max-width: 500px; margin: 10px auto; }
         .slip-header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 15px; }
@@ -104,17 +117,19 @@
         .slip-table th { background: #f1f5f9; padding: 10px; border-bottom: 2px solid #e2e8f0; }
         .slip-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
         .total-section { background: var(--dark); color: #fff; padding: 15px; border-radius: 10px; margin-top: 15px; }
-
-        /* Toggle Switch */
-        .tax-toggle-box { background: #fff; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin: 10px auto; max-width: 500px; border: 1px solid var(--border); }
-        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        
+        /* Tax Toggle Styling */
+        .tax-toggle-bar { background: #fff; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin: 10px auto; max-width: 500px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
+        .switch { position: relative; width: 45px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--danger); }
-        input:checked + .slider:before { transform: translateX(24px); }
+        .slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 24px; transition: .4s; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .4s; }
+        input:checked + .slider { background: var(--danger); }
+        input:checked + .slider:before { transform: translateX(21px); }
 
-        .footer-author { position: fixed; bottom: 10px; right: 15px; font-size: 13px; color: var(--dark); font-weight: 800; z-index: 50; background: #fff; padding: 6px 15px; border-radius: 50px; border: 2px solid var(--dark); }
+        .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; text-transform: uppercase; }
+        .btn-view { background: var(--primary); }
+        .btn-del { background: var(--danger); }
     </style>
 </head>
 <body onclick="handleBackdrop(event)">
@@ -135,7 +150,7 @@
         <div class="input-bar">
             <input type="number" id="base-salary" value="12000" oninput="calc()">
             <div class="pay-box">
-                <div class="pay-label">Net Payable Ks</div>
+                <div class="pay-label">Net Payable ฿</div>
                 <div id="final-pay" style="font-size:24px; font-weight:900; color:var(--success);">0</div>
             </div>
         </div>
@@ -144,8 +159,42 @@
             <div style="text-align: right;">OT HRS: <span id="ot" style="color:var(--danger)">0:00</span></div>
         </div>
     </header>
+
+    <div id="guide-modal" onclick="toggleGuide(event)">
+        <div class="guide-content" onclick="event.stopPropagation()">
+            <h2 style="text-align:center; color:var(--dark); margin-top:0;">အသုံးပြုပုံလမ်းညွှန်</h2>
+            <div class="guide-item" style="border-left: 5px solid var(--success); background: #f0fdf4; padding: 10px; font-weight: 700;">
+                Chabad ဝန်ထမ်းများလစာတွက်ထုတ်လို့လွယ်ကူအောင်ရေးသားပေးထားပါသည်
+            </div>
+            <div class="guide-item"><b>၁။ လစာပြင်ခြင်း:</b> လစာ ၁၂၀၀၀ နေရာတွင် နှိပ်၍ မိမိစိတ်ကြိုက် ပြောင်းလဲနိုင်ပါသည်။</div>
+            <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ်သုံးရန်။</div>
+            <div class="guide-item"><b>၃။ စံနှုန်း:</b> တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> သတ်မှတ်ထားပါသည်။</div>
+            <div class="guide-item"><b>၄။ အချိုးကျလစာ:</b> ၂၃၄ နာရီမပြည့်ပါက အလုပ်လုပ်ခဲ့သော နာရီအလိုက်သာ အချိုးကျ တွက်ချက်ပေးပါမည်။</div>
+            <div class="guide-item"><b>၅။ OT တွက်ချက်ခြင်း:</b> ၂၃၄ နာရီထက် ကျော်လွန်ပါက ပိုလုပ်သော နာရီများအတွက် <b>၁ နာရီလျှင် ၅၇ ဘတ်</b> ပေါင်းပေးပါသည်။</div>
+            <button onclick="toggleGuide(event)" style="width:100%; padding:15px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:16px;">နားလည်ပါပြီ</button>
+        </div>
+    </div>
+
+    <div style="background: #fff; margin: 15px 0; padding: 15px; border-radius: 15px; box-shadow: var(--shadow-sm);">
+        <input type="text" id="search-box" placeholder="🔍 ဝန်ထမ်းအမည်ဖြင့် ရှာဖွေရန်..." oninput="handleSearch()" style="width:100%; padding:12px; border-radius:10px; border:2px solid #e2e8f0; outline:none; font-size:15px; background:#fcfcfc;">
+        
+        <div id="del-ui" class="del-confirm">
+            <div style="font-weight:bold; color:var(--danger); font-size: 14px;">ဤဖိုင်ကို ဖျက်ရန် သေချာပါသလား?</div>
+            <div class="del-btns">
+                <button class="btn-confirm" id="confirm-del-btn">ဖျက်မည်</button>
+                <button class="btn-cancel" onclick="cancelDelete()">Cancel</button>
+            </div>
+        </div>
+
+        <div id="history-list" style="display:none; margin-top:10px; max-height:250px; overflow-y:auto; border: 1px solid #e2e8f0; border-radius: 10px;">
+            <table style="width:100%; border-collapse: collapse;"><tbody id="history-table-body"></tbody></table>
+        </div>
+    </div>
+
     <div id="list"></div>
 </div>
+
+<div class="footer-author">ရေးသားသူ-KKL</div>
 
 <div id="keypad" class="keypad" onclick="event.stopPropagation()">
     <div class="key-grid">
@@ -163,15 +212,15 @@
 </div>
 
 <div id="report-view">
-    <div class="tax-toggle-box">
-        <span style="font-weight: 800; color: var(--danger); font-size: 14px;">ဝင်ငွေခွန် ၅% ဖြတ်မည် (Tax)</span>
+    <div class="tax-toggle-bar">
+        <span style="font-weight: 800; color: var(--danger); font-size: 14px;">ဝင်ငွေခွန် ၅% နှုတ်မည် (Tax)</span>
         <label class="switch">
             <input type="checkbox" id="tax-switch" onchange="updateTaxUI()">
             <span class="slider"></span>
         </label>
     </div>
 
-    <div class="slip-container" id="slip-content">
+    <div class="slip-container">
         <div class="slip-header">
             <h2 style="margin:0; color:var(--dark); letter-spacing:1px; font-size:22px;">CHABAD HOUSE</h2>
             <div style="font-size:12px; color:#64748b; font-weight:700; margin-top:5px; text-transform: uppercase;">SALARY SLIP (PAYROLL)</div>
@@ -185,15 +234,17 @@
         </table>
         <div style="border-top: 2px dashed #cbd5e1; margin: 15px 0; padding-top: 10px;">
             <div class="slip-row"><span>Total Work Hours:</span> <b id="rv-total-hrs">0:00</b></div>
+            <div class="slip-row"><span>Standard Hours:</span> <b>234:00</b></div>
             <div class="slip-row"><span>Calculated Salary:</span> <b id="rv-pro-rata">0</b></div>
-            <div class="slip-row" style="color:var(--danger);"><span>OT Cash:</span> <b id="rv-ot-cash">0</b></div>
-            <div class="slip-row" id="tax-row" style="display:none; color:var(--danger);">
-                <span>Income Tax (5%):</span> <b id="rv-tax-amount">-0</b>
+            <div class="slip-row" style="color:var(--danger);"><span>OT Hours:</span> <b id="rv-ot-hrs">0:00</b></div>
+            <div class="slip-row" style="color:var(--danger);"><span>OT Cash (57 ฿/hr):</span> <b id="rv-ot-cash">0</b></div>
+            <div class="slip-row" id="tax-display-row" style="color:var(--danger); display:none;">
+                <span>Income Tax (5%):</span> <b id="rv-tax-amount">0</b>
             </div>
         </div>
         <div class="total-section">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:14px;">TOTAL NET PAYABLE Ks</span>
+                <span style="font-weight:700; font-size:14px;">TOTAL NET PAYABLE ฿</span>
                 <span style="font-size:26px; font-weight:900;" id="rv-grand-total">0</span>
             </div>
         </div>
@@ -204,11 +255,9 @@
     </div>
 </div>
 
-<div class="footer-author">ရေးသားသူ-KKL</div>
-
 <script>
-    let active = null; let boxes = []; 
-    let currentData = { subTotal: 0, tax: 0, grand: 0 };
+    let active = null; let boxes = []; let pendingDelId = null; let currentResults = {};
+    const list = document.getElementById('list');
 
     for(let d=1; d<=31; d++) {
         const row = document.createElement('div');
@@ -219,7 +268,7 @@
             <div class="box" data-id="${(d-1)*4+2}" onclick="openK(event, this)"></div>
             <div class="box" data-id="${(d-1)*4+3}" onclick="openK(event, this)"></div>
         </div><div style="width:55px; text-align:right; font-weight:bold; color:var(--primary); font-size:13px;" id="dh-${d}">0:00</div>`;
-        document.getElementById('list').appendChild(row);
+        list.appendChild(row);
     }
     boxes = Array.from(document.querySelectorAll('.box'));
 
@@ -228,6 +277,11 @@
         active = el; active.classList.add('active');
         document.getElementById('keypad').classList.add('open');
         document.body.classList.add('keypad-open');
+        setTimeout(() => {
+            const headerHeight = 220;
+            const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: elementPosition - headerHeight - 10, behavior: 'smooth' });
+        }, 100);
     }
 
     function closeK() { if(active) active.classList.remove('active'); document.getElementById('keypad').classList.remove('open'); document.body.classList.remove('keypad-open'); active = null; }
@@ -262,49 +316,100 @@
         let calculatedBase = totalMin >= targetMin ? inputSalary : Math.round((totalMin / targetMin) * inputSalary);
         let otMin = totalMin > targetMin ? totalMin - targetMin : 0;
         let otCash = Math.round((otMin / 60) * 57);
-        
         let subTotal = calculatedBase + otCash;
         let tax = Math.round(subTotal * 0.05);
         
-        currentData = { subTotal, otCash, calculatedBase, totalMin, tax };
+        currentResults = { totalMin, otMin, otCash, calculatedBase, subTotal, tax };
         
         document.getElementById('gt').innerText = Math.floor(totalMin/60) + ":" + (totalMin%60 < 10 ? "0"+(totalMin%60) : totalMin%60);
         document.getElementById('ot').innerText = Math.floor(otMin/60) + ":" + (otMin%60 < 10 ? "0"+(otMin%60) : otMin%60);
         document.getElementById('final-pay').innerText = subTotal.toLocaleString();
-        
-        return currentData;
+        return currentResults;
     }
 
     function updateTaxUI() {
         const isTaxed = document.getElementById('tax-switch').checked;
-        const taxRow = document.getElementById('tax-row');
-        const finalLabel = document.getElementById('rv-grand-total');
+        const taxDisplayRow = document.getElementById('tax-display-row');
+        const grandTotalEl = document.getElementById('rv-grand-total');
         
-        if(isTaxed) {
-            taxRow.style.display = 'flex';
-            document.getElementById('rv-tax-amount').innerText = "- " + currentData.tax.toLocaleString();
-            finalLabel.innerText = (currentData.subTotal - currentData.tax).toLocaleString();
+        if (isTaxed) {
+            taxDisplayRow.style.display = 'flex';
+            document.getElementById('rv-tax-amount').innerText = "- " + currentResults.tax.toLocaleString() + " ฿";
+            grandTotalEl.innerText = (currentResults.subTotal - currentResults.tax).toLocaleString();
         } else {
-            taxRow.style.display = 'none';
-            finalLabel.innerText = currentData.subTotal.toLocaleString();
+            taxDisplayRow.style.display = 'none';
+            grandTotalEl.innerText = currentResults.subTotal.toLocaleString();
         }
+    }
+
+    function saveToDB() {
+        const name = document.getElementById('user-name').value.trim();
+        const month = document.getElementById('work-month').value;
+        if(!name || !month) return alert("အမည်နှင့် လ ကို ထည့်ပေးပါ။");
+        const data = { id: Date.now(), name, month, salary: document.getElementById('base-salary').value, hours: boxes.map(b => b.innerText) };
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        db = db.filter(r => !(r.name === name && r.month === month));
+        db.push(data);
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        alert("သိမ်းဆည်းပြီးပါပြီ။");
+    }
+
+    function handleSearch() {
+        const query = document.getElementById('search-box').value.trim().toLowerCase();
+        const listDiv = document.getElementById('history-list');
+        const tableBody = document.getElementById('history-table-body');
+        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        if (query.length > 0) {
+            const filtered = db.filter(r => r.name.toLowerCase().includes(query));
+            if(filtered.length > 0) {
+                listDiv.style.display = 'block';
+                tableBody.innerHTML = filtered.map(r => `
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 12px; font-size:14px;"><b>${r.name}</b><br><small style="color:var(--primary); font-weight:700;">${r.month}</small></td>
+                        <td style="text-align:right; padding: 12px;">
+                            <button class="btn-action btn-view" onclick="previewRecord('${r.id}')">VIEW</button>
+                            <button class="btn-action btn-del" onclick="askDelete('${r.id}')">DEL</button>
+                        </td>
+                    </tr>`).join('');
+            } else { listDiv.style.display = 'none'; }
+        } else { listDiv.style.display = 'none'; }
+    }
+
+    function askDelete(id) { pendingDelId = id; document.getElementById('del-ui').style.display = 'block'; }
+    function cancelDelete() { document.getElementById('del-ui').style.display = 'none'; pendingDelId = null; }
+    
+    document.getElementById('confirm-del-btn').onclick = function() {
+        let db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        db = db.filter(r => String(r.id) !== String(pendingDelId));
+        localStorage.setItem('chabad_records', JSON.stringify(db));
+        cancelDelete(); handleSearch();
+    };
+
+    function previewRecord(id) {
+        const db = JSON.parse(localStorage.getItem('chabad_records') || '[]');
+        const r = db.find(item => String(item.id) === String(id));
+        if(!r) return;
+        document.getElementById('user-name').value = r.name;
+        document.getElementById('work-month').value = r.month;
+        document.getElementById('base-salary').value = r.salary;
+        r.hours.forEach((h, i) => { if(boxes[i]) boxes[i].innerText = h; });
+        finishDraft();
+        document.getElementById('history-list').style.display = 'none';
+        document.getElementById('search-box').value = "";
     }
 
     function finishDraft() {
         const d = calc(); closeK();
         document.getElementById('edit-view').style.display = 'none';
         document.getElementById('report-view').style.display = 'block';
-        document.getElementById('tax-switch').checked = false; // Default off
-        
         document.getElementById('r-name').innerText = document.getElementById('user-name').value || "-";
         document.getElementById('r-month').innerText = document.getElementById('work-month').value || "-";
-        document.getElementById('r-base').innerText = parseInt(document.getElementById('base-salary').value).toLocaleString() + " Ks";
+        document.getElementById('r-base').innerText = parseInt(document.getElementById('base-salary').value).toLocaleString() + " ฿";
         document.getElementById('rv-total-hrs').innerText = document.getElementById('gt').innerText;
-        document.getElementById('rv-pro-rata').innerText = d.calculatedBase.toLocaleString();
-        document.getElementById('rv-ot-cash').innerText = "+ " + d.otCash.toLocaleString();
-        
+        document.getElementById('rv-pro-rata').innerText = d.calculatedBase.toLocaleString() + " ฿";
+        document.getElementById('rv-ot-hrs').innerText = document.getElementById('ot').innerText;
+        document.getElementById('rv-ot-cash').innerText = "+ " + d.otCash.toLocaleString() + " ฿";
         updateTaxUI();
-
         const body = document.getElementById('report-body'); body.innerHTML = "";
         for(let d=1; d<=31; d++) {
             let timeStr = document.getElementById(`dh-${d}`).innerText;
@@ -316,10 +421,11 @@
         window.scrollTo(0,0);
     }
 
-    function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
-    function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function toggleGuide(e) { e.stopPropagation(); const modal = document.getElementById('guide-modal'); modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex'; }
     function nextRow() { if(!active) return; let next = (Math.floor(parseInt(active.dataset.id)/4)+1)*4; if(next < boxes.length) boxes[next].click(); }
     function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
+    function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
+    function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
 </body>
 </html>
