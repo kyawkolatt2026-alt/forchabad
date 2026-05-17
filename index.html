@@ -130,6 +130,16 @@
         .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; text-transform: uppercase; }
         .btn-view { background: var(--primary); }
         .btn-del { background: var(--danger); }
+
+        /* Print နှိပ်ချိန်မှာ ခလုတ်တွေမပါဘဲ စာရွက်ပေါ် သေသပ်အောင်လုပ်မည့် စနစ် */
+        @media print {
+            body { background: #ffffff; padding: 0; margin: 0; }
+            #edit-view, #keypad, .tax-toggle-bar, .print-actions-bar, .footer-author { display: none !important; }
+            #report-view { position: relative; inset: auto; background: #ffffff; padding: 0; overflow: visible; display: block !important; }
+            .slip-container { box-shadow: none; border: none; max-width: 100%; width: 100%; margin: 0; padding: 0; }
+            .total-section { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: #ffffff !important; }
+            .slip-table th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
     </style>
 </head>
 <body onclick="handleBackdrop(event)">
@@ -169,7 +179,7 @@
             <div class="guide-item"><b>၁။ လစာပြင်ခြင်း:</b> လစာ ၁၂၀၀၀ နေရာတွင် နှိပ်၍ မိမိစိတ်ကြိုက် ပြောင်းလဲနိုင်ပါသည်။</div>
             <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ်သုံးရန်။</div>
             <div class="guide-item"><b>၃။ စံနှုန်း:</b> တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> သတ်မှတ်ထားပါသည်။</div>
-            <div class="guide-item"><b>၄။ အချိုးကျလစာ:</b> ၂၃၄ နာရီမပြည့်ပါက အလုပ်လုပ်ခဲ့သော နာရီအလိုက်သာ အချိုးကျ တွက်ချက်ပေးပါမည်။</div>
+            <div class="guide-item"><b>၄။ အချက်အလက်များကို ပရင့်ထုတ်ခြင်း:</b> PREVIEW ထဲသွားပြီး PRINT SLIP ကိုနှိပ်ကာ ဘောင်ချာထုတ်နိုင်ပါသည်။</div>
             <div class="guide-item"><b>၅။ OT တွက်ချက်ခြင်း:</b> ၂၃၄ နာရီထက် ကျော်လွန်ပါက ပိုလုပ်သော နာရီများအတွက် <b>၁ နာရီလျှင် ၅၇ ဘတ်</b> ပေါင်းပေးပါသည်။</div>
             <button onclick="toggleGuide(event)" style="width:100%; padding:15px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:16px;">နားလည်ပါပြီ</button>
         </div>
@@ -249,9 +259,11 @@
             </div>
         </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px auto; max-width:500px;">
+    
+    <div class="print-actions-bar" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:20px auto; max-width:500px;">
         <button style="padding:15px; border-radius:12px; background:#64748b; color:white; border:none; font-weight:bold;" onclick="closeReport()">BACK</button>
-        <button style="padding:15px; border-radius:12px; background:var(--primary); color:white; border:none; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
+        <button style="padding:15px; border-radius:12px; background:var(--dark); color:white; border:none; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
+        <button style="padding:15px; border-radius:12px; background:var(--success); color:white; border:none; font-weight:bold;" onclick="printSlip()">PRINT SLIP</button>
     </div>
 </div>
 
@@ -426,6 +438,11 @@
     function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
     function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    
+    // Print ထုတ်ရန် JavaScript function
+    function printSlip() {
+        window.print();
+    }
 </script>
 </body>
 </html>
