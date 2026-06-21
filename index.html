@@ -18,7 +18,15 @@
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --gold: #f59e0b;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* iOS Double Tap Zoom ပိတ်ရန် အဓိကနေရာ */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            touch-action: manipulation; /* ဂဏန်း ၂ ခါဆက်တိုက်နှိပ်ရင် zoom ဖြစ်တာကို ပိတ်ပေးသည် */
+        }
+
         body { background: var(--bg); margin: 0; padding: 220px 10px 100px 10px; color: var(--text-main); transition: 0.3s; overflow-x: hidden; }
         body.keypad-open { padding-bottom: 400px; }
 
@@ -94,9 +102,12 @@
         .keypad { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; z-index: 2000; transform: translateY(100%); transition: 0.3s; border-top: 4px solid var(--dark); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.2); }
         .keypad.open { transform: translateY(0); }
         .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .key-grid button { padding: 15px; font-size: 24px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; }
+        .key-grid button { 
+            padding: 15px; font-size: 24px; font-weight: bold; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; 
+            touch-action: manipulation; /* Keypad အတွက်လည်း ထည့်ပေးသည် */
+        }
         .ctrl-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 15px 15px 15px; }
-        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; text-transform: uppercase; }
+        .ctrl-btns button { padding: 12px 2px; border-radius: 8px; border: none; font-weight: bold; color: white; font-size: 10px; text-transform: uppercase; touch-action: manipulation; }
 
         .del-confirm { display: none; background: #fff1f2; border: 2px solid var(--danger); padding: 15px; border-radius: 12px; margin-top: 10px; text-align: center; }
         .del-btns { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
@@ -118,7 +129,6 @@
         .slip-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; }
         .total-section { background: var(--dark); color: #fff; padding: 15px; border-radius: 10px; margin-top: 15px; }
         
-        /* Tax Toggle Styling */
         .tax-toggle-bar { background: #fff; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin: 10px auto; max-width: 500px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
         .switch { position: relative; width: 45px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -127,11 +137,10 @@
         input:checked + .slider { background: var(--danger); }
         input:checked + .slider:before { transform: translateX(21px); }
 
-        .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; text-transform: uppercase; }
+        .btn-action { padding: 8px 12px; border: none; border-radius: 6px; font-weight: bold; color: #fff; font-size: 11px; margin-left: 5px; text-transform: uppercase; touch-action: manipulation; }
         .btn-view { background: var(--primary); }
         .btn-del { background: var(--danger); }
 
-        /* Print နှိပ်ချိန်မှာ ခလုတ်တွေမပါဘဲ စာရွက်ပေါ် သေသပ်အောင်လုပ်မည့် စနစ် */
         @media print {
             body { background: #ffffff; padding: 0; margin: 0; }
             #edit-view, #keypad, .tax-toggle-bar, .print-actions-bar, .footer-author { display: none !important; }
@@ -261,9 +270,9 @@
     </div>
     
     <div class="print-actions-bar" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:20px auto; max-width:500px;">
-        <button style="padding:15px; border-radius:12px; background:#64748b; color:white; border:none; font-weight:bold;" onclick="closeReport()">BACK</button>
-        <button style="padding:15px; border-radius:12px; background:var(--dark); color:white; border:none; font-weight:bold;" onclick="switchToEdit()">EDIT DATA</button>
-        <button style="padding:15px; border-radius:12px; background:var(--success); color:white; border:none; font-weight:bold;" onclick="printSlip()">PRINT SLIP</button>
+        <button style="padding:15px; border-radius:12px; background:#64748b; color:white; border:none; font-weight:bold; touch-action: manipulation;" onclick="closeReport()">BACK</button>
+        <button style="padding:15px; border-radius:12px; background:var(--dark); color:white; border:none; font-weight:bold; touch-action: manipulation;" onclick="switchToEdit()">EDIT DATA</button>
+        <button style="padding:15px; border-radius:12px; background:var(--success); color:white; border:none; font-weight:bold; touch-action: manipulation;" onclick="printSlip()">PRINT SLIP</button>
     </div>
 </div>
 
@@ -438,11 +447,7 @@
     function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
     function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    
-    // Print ထုတ်ရန် JavaScript function
-    function printSlip() {
-        window.print();
-    }
+    function printSlip() { window.print(); }
 </script>
 </body>
 </html>
