@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CHABAD HOUSE | Payroll Pro</title>
+    <!-- html2canvas Library - APK တွင် အလုပ်လုပ်သည့် Print Solution -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { 
             --bg: #f1f5f9; 
@@ -141,6 +143,15 @@
         .btn-view { background: var(--primary); }
         .btn-del { background: var(--danger); }
 
+        /* Print Modal */
+        #print-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 6000; align-items: center; justify-content: center; padding: 20px; }
+        .print-modal-content { background: #fff; padding: 25px; border-radius: 20px; max-width: 400px; text-align: center; }
+        .print-modal-content h3 { margin-top: 0; color: var(--dark); }
+        .print-modal-content .loader { border: 4px solid #f1f5f9; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .print-modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+        .print-modal-btns button { padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
         @media print {
             body { background: #ffffff; padding: 0; margin: 0; }
             #edit-view, #keypad, .tax-toggle-bar, .print-actions-bar, .footer-author { display: none !important; }
@@ -239,7 +250,7 @@
         </label>
     </div>
 
-    <div class="slip-container">
+    <div class="slip-container" id="slip-container-for-print">
         <div class="slip-header">
             <h2 style="margin:0; color:var(--dark); letter-spacing:1px; font-size:22px;">CHABAD HOUSE</h2>
             <div style="font-size:12px; color:#64748b; font-weight:700; margin-top:5px; text-transform: uppercase;">SALARY SLIP (PAYROLL)</div>
@@ -273,6 +284,18 @@
         <button style="padding:15px; border-radius:12px; background:#64748b; color:white; border:none; font-weight:bold; touch-action: manipulation;" onclick="closeReport()">BACK</button>
         <button style="padding:15px; border-radius:12px; background:var(--dark); color:white; border:none; font-weight:bold; touch-action: manipulation;" onclick="switchToEdit()">EDIT DATA</button>
         <button style="padding:15px; border-radius:12px; background:var(--success); color:white; border:none; font-weight:bold; touch-action: manipulation;" onclick="printSlip()">PRINT SLIP</button>
+    </div>
+</div>
+
+<!-- Print Modal - APK တွင် အလုပ်လုပ်သည့် Loading Dialog -->
+<div id="print-modal" onclick="event.stopPropagation()">
+    <div class="print-modal-content">
+        <h3>Slip ကို ပြင်ဆင်နေသည်...</h3>
+        <div class="loader"></div>
+        <p style="color: #64748b; font-size: 14px;">ခဏစောင့်ပါ။ အချိန်မကြေးမီ ပြီးလိမ့်မည်။</p>
+        <div class="print-modal-btns">
+            <button onclick="closePrintModal()" style="background: #64748b; color: white;">ပယ်ဖျက်မည်</button>
+        </div>
     </div>
 </div>
 
@@ -447,7 +470,43 @@
     function confirmClear() { if(confirm("ဒေတာအသစ်ရိုက်မလား?")) { boxes.forEach(b => b.innerText = ""); calc(); } }
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
     function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    function printSlip() { window.print(); }
+    
+    // ✅ APK-Compatible Print Function - html2canvas ကို အသုံးပြုခြင်း
+    async function printSlip() {
+        const printModal = document.getElementById('print-modal');
+        printModal.style.display = 'flex';
+        
+        try {
+            const slipContainer = document.getElementById('slip-container-for-print');
+            const canvas = await html2canvas(slipContainer, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff',
+                allowTaint: true
+            });
+            
+            const image = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            const fileName = `Salary_Slip_${document.getElementById('user-name').value}_${document.getElementById('work-month').value}.png`;
+            link.href = image;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            closePrintModal();
+            alert('Slip ကို ပြင်ဆင်ပြီးပါပြီ။ ဒေါင်းလုဒ်ဖိုလ်ဒါတွင် သိမ်းဆည်းထားပါသည်။');
+        } catch (error) {
+            console.error('Print Error:', error);
+            closePrintModal();
+            alert('ပြင်ဆင်ခြင်းတွင် အမှားအယွင်း ရှိပါသည်။ ထပ်မံစမ်းကြည့်ပါ။');
+        }
+    }
+    
+    function closePrintModal() {
+        document.getElementById('print-modal').style.display = 'none';
+    }
 </script>
 </body>
 </html>
