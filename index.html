@@ -147,11 +147,13 @@
         .print-preview-header h3 { margin: 0; font-size: 18px; }
         .print-preview-close { background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; font-weight: bold; }
         .print-preview-body { padding: 20px; }
-        .print-preview-slip { background: #fff; border: 2px solid var(--dark); border-radius: 15px; padding: 20px; max-width: 500px; margin: 0 auto; }
+        .slip-image-container { text-align: center; }
+        .slip-image-container img { max-width: 100%; height: auto; border: 2px solid var(--dark); border-radius: 15px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+        .image-hint { color: #64748b; font-size: 12px; margin-top: 15px; font-weight: bold; text-align: center; }
         .print-preview-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; border-top: 2px solid var(--border); background: #f1f5f9; border-radius: 0 0 20px 20px; }
         .print-preview-actions button { padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
         .btn-close-preview { background: #64748b; color: #fff; }
-        .btn-save-image { background: var(--success); color: #fff; }
+        .btn-print { background: var(--success); color: #fff; }
 
         @media print {
             body { background: #ffffff; padding: 0; margin: 0; }
@@ -200,7 +202,7 @@
             <div class="guide-item"><b>၁။ လစာပြင်ခြင်း:</b> လစာ ၁၂၀၀၀ နေရာတွင် နှိပ်၍ မိမိစိတ်ကြိုက် ပြောင်းလဲနိုင်ပါသည်။</div>
             <div class="guide-item"><b>၂။ အချိန်ထည့်ခြင်း:</b> အကွက်နှိပ်၍ ဂဏန်း ၄ လုံး (ဥပမာ- ၀၉၀၀) ရိုက်ပါ။ ၂၄ နာရီစနစ်သုံးရန်။</div>
             <div class="guide-item"><b>၃။ စံနှုန်း:</b> တစ်လလျှင် အလုပ်ချိန် <b>၂၃၄ နာရီ</b> သတ်မှတ်ထားပါသည်။</div>
-            <div class="guide-item"><b>၄။ အချက်အလက်များကို ပရင့်ထုတ်ခြင်း:</b> PREVIEW ထဲသွားပြီး PRINT SLIP ကိုနှိပ်ကာ ဘောင်ချာထုတ်နိုင်ပါသည်။</div>
+            <div class="guide-item"><b>၄။ အချက်အလက်များကို ပရင့်ထုတ်ခြင်း:</b> PREVIEW ထဲသွားပြီး PRINT SLIP ကိုနှိပ်ကာ ပုံကို ခဏဖိထားရင် (Long-press) Gallery ထဲသိမ်းနိုင်ပါသည်။</div>
             <div class="guide-item"><b>၅။ OT တွက်ချက်ခြင်း:</b> ၂၃၄ နာရီထက် ကျော်လွန်ပါက ပိုလုပ်သော နာရီများအတွက် <b>၁ နာရီလျှင် ၅၇ ဘတ်</b> ပေါင်းပေးပါသည်။</div>
             <button onclick="toggleGuide(event)" style="width:100%; padding:15px; background:var(--dark); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:16px;">နားလည်ပါပြီ</button>
         </div>
@@ -288,24 +290,33 @@
     </div>
 </div>
 
-<!-- Print Preview Modal - APK တွင်အလုပ်လုပ်သည့် Preview -->
+<!-- Print Preview Modal - APK တွင်အလုပ်လုပ်သည့် Long-press Image -->
 <div id="print-preview-modal" onclick="closePrintPreview()">
     <div class="print-preview-content" onclick="event.stopPropagation()">
         <div class="print-preview-header">
-            <h3>Salary Slip Preview</h3>
+            <h3>Salary Slip Image</h3>
             <button class="print-preview-close" onclick="closePrintPreview()">×</button>
         </div>
         <div class="print-preview-body">
-            <div class="print-preview-slip" id="preview-slip-content">
-                <!-- Slip content will be cloned here -->
+            <div class="slip-image-container">
+                <img id="slip-image" src="" alt="Salary Slip" style="display:none;">
+                <div id="loading-spinner" style="text-align:center; padding:40px;">
+                    <div style="border: 4px solid #f1f5f9; border-top: 4px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                    <p style="color:#64748b; margin-top:15px;">ပုံကို ပြင်ဆင်နေသည်...</p>
+                </div>
+                <div class="image-hint">💡 ပုံကို ခဏဖိထားရင် (Long-press) Gallery ထဲသိမ်းနိုင်ပါသည်</div>
             </div>
         </div>
         <div class="print-preview-actions">
             <button class="btn-close-preview" onclick="closePrintPreview()">CLOSE</button>
-            <button class="btn-save-image" onclick="saveSlipAsImage()">SAVE AS IMAGE</button>
+            <button class="btn-print" onclick="window.print()">PRINT</button>
         </div>
     </div>
 </div>
+
+<style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
 
 <script>
     let active = null; let boxes = []; let pendingDelId = null; let currentResults = {};
@@ -479,50 +490,48 @@
     function closeReport() { document.getElementById('report-view').style.display = 'none'; document.getElementById('edit-view').style.display = 'block'; }
     function switchToEdit() { closeReport(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     
-    // ✅ APK-Compatible Print Preview - External Library မရှိဘဲ အလုပ်လုပ်သည့် နည်းလမ်း
+    // ✅ APK-Compatible Print Preview - Long-press Image Save
     function openPrintPreview() {
         const modal = document.getElementById('print-preview-modal');
-        const previewContent = document.getElementById('preview-slip-content');
-        const slipContainer = document.getElementById('slip-container-for-print');
+        const slipElement = document.getElementById('slip-container-for-print');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const slipImage = document.getElementById('slip-image');
         
-        // Clone the slip for preview
-        previewContent.innerHTML = slipContainer.innerHTML;
         modal.style.display = 'flex';
-    }
-    
-    function closePrintPreview() {
-        document.getElementById('print-preview-modal').style.display = 'none';
-    }
-    
-    // Save Slip as Image using Canvas API (APK တွင် အလုပ်လုပ်သည့် နည်းလမ်း)
-    function saveSlipAsImage() {
-        const slipElement = document.getElementById('preview-slip-content');
+        loadingSpinner.style.display = 'block';
+        slipImage.style.display = 'none';
         
-        // Create canvas
+        // Use html2canvas if available, otherwise use canvas rendering
+        setTimeout(() => {
+            if (typeof html2canvas !== 'undefined') {
+                html2canvas(slipElement, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    const imageUrl = canvas.toDataURL('image/png');
+                    slipImage.src = imageUrl;
+                    loadingSpinner.style.display = 'none';
+                    slipImage.style.display = 'block';
+                }).catch(() => {
+                    fallbackCanvasRender();
+                });
+            } else {
+                fallbackCanvasRender();
+            }
+        }, 100);
+    }
+    
+    function fallbackCanvasRender() {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         
-        // Set canvas size (A4 paper size)
-        const width = 500;
-        const height = 800;
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = 500;
+        canvas.height = 900;
         
-        // White background
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, width, height);
-        
-        // Get text content from slip
-        const employeeName = document.getElementById('r-name').innerText;
-        const salaryMonth = document.getElementById('r-month').innerText;
-        const baseSalary = document.getElementById('r-base').innerText;
-        const totalHrs = document.getElementById('rv-total-hrs').innerText;
-        const proRata = document.getElementById('rv-pro-rata').innerText;
-        const otHrs = document.getElementById('rv-ot-hrs').innerText;
-        const otCash = document.getElementById('rv-ot-cash').innerText;
-        const grandTotal = document.getElementById('rv-grand-total').innerText;
-        const isTaxed = document.getElementById('tax-switch').checked;
-        const taxAmount = isTaxed ? document.getElementById('rv-tax-amount').innerText : '';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         let y = 30;
         
@@ -530,12 +539,12 @@
         ctx.fillStyle = '#1e293b';
         ctx.font = 'bold 24px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('CHABAD HOUSE', width / 2, y);
+        ctx.fillText('CHABAD HOUSE', canvas.width / 2, y);
         y += 30;
         
         ctx.font = '12px Arial';
         ctx.fillStyle = '#64748b';
-        ctx.fillText('SALARY SLIP (PAYROLL)', width / 2, y);
+        ctx.fillText('SALARY SLIP (PAYROLL)', canvas.width / 2, y);
         y += 30;
         
         // Content
@@ -543,36 +552,36 @@
         ctx.font = '12px Arial';
         ctx.textAlign = 'left';
         
-        ctx.fillText('Employee Name: ' + employeeName, 30, y);
-        y += 20;
-        ctx.fillText('Salary Month: ' + salaryMonth, 30, y);
-        y += 20;
-        ctx.fillText('Base Salary: ' + baseSalary, 30, y);
-        y += 25;
+        const lines = [
+            'Employee Name: ' + document.getElementById('r-name').innerText,
+            'Salary Month: ' + document.getElementById('r-month').innerText,
+            'Base Salary: ' + document.getElementById('r-base').innerText,
+            '',
+            'Total Work Hours: ' + document.getElementById('rv-total-hrs').innerText,
+            'Standard Hours: 234:00',
+            'Calculated Salary: ' + document.getElementById('rv-pro-rata').innerText,
+            'OT Hours: ' + document.getElementById('rv-ot-hrs').innerText,
+            'OT Cash (57 ฿/hr): ' + document.getElementById('rv-ot-cash').innerText
+        ];
         
-        ctx.fillText('Total Work Hours: ' + totalHrs, 30, y);
-        y += 20;
-        ctx.fillText('Standard Hours: 234:00', 30, y);
-        y += 20;
-        ctx.fillText('Calculated Salary: ' + proRata, 30, y);
-        y += 20;
-        
-        ctx.fillStyle = '#dc2626';
-        ctx.fillText('OT Hours: ' + otHrs, 30, y);
-        y += 20;
-        ctx.fillText('OT Cash (57 ฿/hr): ' + otCash, 30, y);
-        y += 20;
-        
-        if (isTaxed) {
-            ctx.fillText('Income Tax (5%): ' + taxAmount, 30, y);
-            y += 20;
+        if (document.getElementById('tax-switch').checked) {
+            lines.push('Income Tax (5%): ' + document.getElementById('rv-tax-amount').innerText);
         }
         
-        y += 10;
+        lines.forEach(line => {
+            if (line === '') {
+                y += 10;
+            } else {
+                ctx.fillText(line, 30, y);
+                y += 20;
+            }
+        });
+        
+        y += 20;
         
         // Total section
         ctx.fillStyle = '#1e293b';
-        ctx.fillRect(20, y, width - 40, 50);
+        ctx.fillRect(20, y, canvas.width - 40, 60);
         
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 14px Arial';
@@ -581,23 +590,16 @@
         
         ctx.font = 'bold 26px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText(grandTotal, width - 30, y + 28);
+        ctx.fillText(document.getElementById('rv-grand-total').innerText, canvas.width - 30, y + 30);
         
-        // Convert canvas to image and trigger download
-        canvas.toBlob(function(blob) {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            const fileName = `Salary_Slip_${document.getElementById('user-name').value}_${document.getElementById('work-month').value}.png`;
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            alert('Slip ကို ပုံအဖြစ် သိမ်းဆည်းပြီးပါပြီ။');
-            closePrintPreview();
-        });
+        const imageUrl = canvas.toDataURL('image/png');
+        document.getElementById('slip-image').src = imageUrl;
+        document.getElementById('loading-spinner').style.display = 'none';
+        document.getElementById('slip-image').style.display = 'block';
+    }
+    
+    function closePrintPreview() {
+        document.getElementById('print-preview-modal').style.display = 'none';
     }
 </script>
 </body>
